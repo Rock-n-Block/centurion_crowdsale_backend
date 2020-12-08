@@ -74,7 +74,6 @@ pysha3==1.0.2
 pytest==6.1.2
 python-bitcoinrpc==1.0
 python-dateutil==2.8.1
-python-hdwallet==0.2.1
 pytz==2020.4
 pywallet==0.1.0
 PyYAML==5.3.1

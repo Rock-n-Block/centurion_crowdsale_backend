@@ -22,6 +22,11 @@ class CenturionProjectView(APIView):
         serializer = CenturionProjectSerializer(project)
         return Response(serializer.data, status=200)
 
+    def delete(self, request, id):
+        project = CenturionProject.objects.get(id=id)
+        project.delete()
+        return Response(status=204)
+
 
 class CenturionProjectsView(APIView):
     @swagger_auto_schema(
@@ -50,4 +55,6 @@ class CenturionProjectsView(APIView):
             raise ValidationError(detail={'description': serializer.errors, 'project': request.data})
 
         return Response(serializer.data, status=201)
+
+
 
