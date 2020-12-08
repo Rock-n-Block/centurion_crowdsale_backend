@@ -5,8 +5,14 @@ from centurion_crowdsale.projects.models import CenturionProject
 class CenturionProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = CenturionProject
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'usd_collected_from_fiat': {'read_only': True},
+            'usd_collected_from_duc': {'read_only': True},
+            'duc_collected': {'read_only': True}
+        }
         fields = (
-            'project_id',
+            'id',
             'category',
             'status',
             'project_name',
@@ -22,6 +28,7 @@ class CenturionProjectSerializer(serializers.ModelSerializer):
             'ducx_staking_total_percent',
             'duc_percent_in_target_raise',
             'usd_target_raise',
+            'usd_minimal_purchase',
             'usd_collected_from_fiat',
             'usd_collected_from_duc',
             'usd_collected',
@@ -36,6 +43,7 @@ class CenturionProjectListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CenturionProject
         fields = (
+            'id',
             'default_image',
             'project_name',
             'description',

@@ -6,10 +6,9 @@ from django.contrib.postgres.fields import ArrayField
 
 
 class CenturionProject(models.Model):
-    project_id = models.IntegerField()
     category = models.CharField(max_length=20)
     project_name = models.CharField(max_length=50)
-    description = models.TextField()
+    description = models.TextField(default='')
     images = ArrayField(models.URLField(), default=list)
     usd_target_raise = models.DecimalField(max_digits=100, decimal_places=2)
     usd_collected_from_fiat = models.DecimalField(max_digits=100, decimal_places=2, default=0)
@@ -23,9 +22,9 @@ class CenturionProject(models.Model):
     ducx_staking_monthly_percent = models.IntegerField()
     staking_months = models.IntegerField()
 
-    token_contract_address = models.CharField(max_length=100)
-    token_decimals = models.IntegerField()
-    token_symbol = models.CharField(max_length=10)
+    token_contract_address = models.CharField(max_length=100, null=True, default=None)
+    token_decimals = models.IntegerField(null=True, default=None)
+    token_symbol = models.CharField(max_length=10,null=True, default=None)
 
     @property
     def status(self):

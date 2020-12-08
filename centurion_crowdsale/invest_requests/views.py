@@ -25,7 +25,6 @@ class InvestRequestView(APIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             manual_parameters=[
-                openapi.Parameter('category', openapi.IN_PATH, type=openapi.TYPE_STRING),
                 openapi.Parameter('id', openapi.IN_PATH, type=openapi.TYPE_INTEGER),
             ],
             required=['email'],
@@ -35,11 +34,11 @@ class InvestRequestView(APIView):
         ),
         responses={201: InvestRequestSerializer()},
     )
-    def post(self, request, category, id):
+    def post(self, request, id):
         request_data = request.data
         print(f'INVEST REQUEST data: {request_data}', flush=True)
         email = request_data['email']
-        project = CenturionProject.objects.get(category=category, project_id=id)
+        project = CenturionProject.objects.get(id=id)
         invest_request = get_or_create_invest_request(email, project)
 
         serializer = InvestRequestSerializer(invest_request)
@@ -52,7 +51,6 @@ class ValidateUsdFromDucAmountView(APIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             manual_parameters=[
-                openapi.Parameter('category', openapi.IN_PATH, type=openapi.TYPE_STRING),
                 openapi.Parameter('id', openapi.IN_PATH, type=openapi.TYPE_INTEGER),
             ],
             required=['usd_amount'],
@@ -62,10 +60,10 @@ class ValidateUsdFromDucAmountView(APIView):
         ),
         responses={200: validate_usd_from_duc_amount_result},
     )
-    def post(self, request, category, id):
+    def post(self, request, id):
         usd_amount = request.data['usd_amount']
         duc_amount = usd_amount / DUC_RATE
-        project = CenturionProject.objects.get(category=category, project_id=id)
+        project = CenturionProject.objects.get(id=id)
 
         return Response({'amount_valid': duc_amount + float(project.duc_collected) <= project.duc_target_raise}, status=201)
 

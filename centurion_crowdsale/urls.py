@@ -20,7 +20,7 @@ from drf_yasg import openapi
 from rest_framework import permissions
 from centurion_crowdsale.invest_requests.views import InvestRequestView, ValidateUsdFromDucAmountView
 from centurion_crowdsale.vouchers.views import VoucherActivationView
-from centurion_crowdsale.projects.views import CenturionProjectView, CenturionProjectListView
+from centurion_crowdsale.projects.views import CenturionProjectView, CenturionProjectsView
 from centurion_crowdsale.rates.views import UsdRateView
 
 schema_view = get_schema_view(
@@ -42,8 +42,8 @@ urlpatterns = [
     path('api/v1/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('api/v1/activate_voucher/', VoucherActivationView.as_view()),
     path('api/v1/usd_rates/', UsdRateView.as_view()),
-    path('api/v1/project/<str:category>/<int:id>/invest', InvestRequestView.as_view()),
-    path('api/v1/project/<str:category>/<int:id>/validate_usd_from_duc', ValidateUsdFromDucAmountView.as_view()),
-    path('api/v1/project/<str:category>/<int:id>/', CenturionProjectView.as_view()),
-    path('api/v1/project/<str:category>/', CenturionProjectListView.as_view()),
+    path('api/v1/projects/<int:id>/invest', InvestRequestView.as_view()),
+    path('api/v1/projects/<int:id>/validate_usd_from_duc', ValidateUsdFromDucAmountView.as_view()),
+    path('api/v1/projects/<int:id>/', CenturionProjectView.as_view()),
+    path('api/v1/projects/', CenturionProjectsView.as_view()),
 ]
