@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
+    'corsheaders',
     'centurion_crowdsale.invest_requests',
     'centurion_crowdsale.payments',
     'centurion_crowdsale.vouchers',
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -131,6 +133,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 RATES_CHECKER_TIMEOUT = 30
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 try:
     from centurion_crowdsale.settings_local import *
