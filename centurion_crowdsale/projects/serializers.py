@@ -18,6 +18,7 @@ class CenturionProjectSerializer(serializers.ModelSerializer):
             'project_name',
             'description',
             'description_title',
+            'default_image'
             'images',
             'investors',
             'raise_start_date',
