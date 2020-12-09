@@ -73,3 +73,7 @@ class CenturionProject(models.Model):
     @property
     def default_image(self):
         return self.images[0] if self.images else ''
+
+    @property
+    def fiat_percent_in_target_raise(self):
+        return 100 - self.duc_percent_in_target_raise

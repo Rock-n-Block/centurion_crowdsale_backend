@@ -28,6 +28,7 @@ class CenturionProjectSerializer(serializers.ModelSerializer):
             'ducx_staking_monthly_percent',
             'ducx_staking_total_percent',
             'duc_percent_in_target_raise',
+            'fiat_percent_in_target_raise',
             'usd_target_raise',
             'usd_minimal_purchase',
             'usd_collected_from_fiat',
