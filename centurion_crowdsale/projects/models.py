@@ -10,7 +10,9 @@ class CenturionProject(models.Model):
     project_name = models.CharField(max_length=50)
     description_title = models.CharField(max_length=50)
     description = models.TextField(default='')
+
     images = ArrayField(models.CharField(max_length=50), default=list)
+    default_image = models.CharField(max_length=50)
     usd_target_raise = models.DecimalField(max_digits=100, decimal_places=2)
     usd_collected_from_fiat = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     usd_collected_from_duc = models.DecimalField(max_digits=100, decimal_places=2, default=0)
@@ -70,9 +72,6 @@ class CenturionProject(models.Model):
     def ducx_staking_total_percent(self):
         return self.staking_months * self.ducx_staking_monthly_percent
 
-    @property
-    def default_image(self):
-        return self.images[0] if self.images else ''
 
     @property
     def fiat_percent_in_target_raise(self):
