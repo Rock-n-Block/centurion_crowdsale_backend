@@ -10,7 +10,7 @@ class CenturionProject(models.Model):
     project_name = models.CharField(max_length=50)
     description_title = models.CharField(max_length=50)
     description = models.TextField(default='')
-    images = ArrayField(models.URLField(), default=list)
+    images = ArrayField(models.CharField(max_length=50), default=list)
     usd_target_raise = models.DecimalField(max_digits=100, decimal_places=2)
     usd_collected_from_fiat = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     usd_collected_from_duc = models.DecimalField(max_digits=100, decimal_places=2, default=0)
