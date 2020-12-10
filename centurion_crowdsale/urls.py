@@ -25,9 +25,9 @@ from centurion_crowdsale.rates.views import UsdRateView
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Ducatus Crowdsale API",
+        title="Centurion Crowdsale API",
         default_version='v1',
-        description="API for ducatus crowdsale backend",
+        description="API for centurion crowdsale backend",
         license=openapi.License(name="MIT License"),
     ),
     public=True,
@@ -42,8 +42,8 @@ urlpatterns = [
     path('api/v1/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('api/v1/activate_voucher/', VoucherActivationView.as_view()),
     path('api/v1/usd_rates/', UsdRateView.as_view()),
-    path('api/v1/projects/<int:id>/invest', InvestRequestView.as_view()),
-    path('api/v1/projects/<int:id>/validate_usd_from_duc', ValidateUsdFromDucAmountView.as_view()),
-    path('api/v1/projects/<int:id>/', CenturionProjectView.as_view()),
+    path('api/v1/projects/<str:id>/invest', InvestRequestView.as_view()),
+    path('api/v1/projects/<str:id>/validate_usd_from_duc', ValidateUsdFromDucAmountView.as_view()),
+    path('api/v1/projects/<str:id>/', CenturionProjectView.as_view()),
     path('api/v1/projects/', CenturionProjectsView.as_view()),
 ]

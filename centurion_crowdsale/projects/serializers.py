@@ -12,7 +12,7 @@ class CenturionProjectSerializer(serializers.ModelSerializer):
             'duc_collected': {'read_only': True}
         }
         fields = (
-            'id',
+            'string_id',
             'category',
             'status',
             'project_name',
@@ -46,7 +46,7 @@ class CenturionProjectListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CenturionProject
         fields = (
-            'id',
+            'string_id',
             'status',
             'default_image',
             'project_name',

@@ -13,17 +13,17 @@ class CenturionProjectView(APIView):
     @swagger_auto_schema(
         operation_description="Get project info",
         manual_parameters=[
-            openapi.Parameter('id', openapi.IN_PATH, type=openapi.TYPE_INTEGER),
+            openapi.Parameter('id', openapi.IN_PATH, type=openapi.TYPE_STRING),
         ],
         responses={200: CenturionProjectSerializer()},
     )
     def get(self, request, id):
-        project = CenturionProject.objects.get(id=id)
+        project = CenturionProject.objects.get(string_id=id)
         serializer = CenturionProjectSerializer(project)
         return Response(serializer.data, status=200)
 
     def delete(self, request, id):
-        project = CenturionProject.objects.get(id=id)
+        project = CenturionProject.objects.get(string_id=id)
         project.delete()
         return Response(status=204)
 

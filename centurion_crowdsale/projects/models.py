@@ -8,9 +8,9 @@ from django.contrib.postgres.fields import ArrayField
 class CenturionProject(models.Model):
     category = models.CharField(max_length=20)
     project_name = models.CharField(max_length=50)
+    string_id = models.CharField(max_length=50, unique=True)
     description_title = models.CharField(max_length=50)
     description = models.TextField(default='')
-
     images = ArrayField(models.CharField(max_length=50), default=list)
     default_image = models.CharField(max_length=50)
     usd_target_raise = models.DecimalField(max_digits=100, decimal_places=2)
