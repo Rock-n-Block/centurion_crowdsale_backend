@@ -18,7 +18,7 @@ class CenturionProject(models.Model):
     usd_collected_from_duc = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     duc_collected = models.DecimalField(max_digits=100, decimal_places=0, default=0)
     usd_minimal_purchase = models.IntegerField()
-    raise_start_date = models.DateField()
+    raise_start_date = models.DateField(null=True, default=None)
     raise_months = models.IntegerField()
     months_between_raise_and_staking = models.IntegerField()
     duc_percent_in_target_raise = models.IntegerField()
@@ -32,7 +32,7 @@ class CenturionProject(models.Model):
     @property
     def status(self):
         today = date.today()
-        if today < self.raise_start_date:
+        if not self.raise_start_date or today < self.raise_start_date:
             return 'COMING SOON'
         elif today <= self.raise_finish_date:
             return 'ACTIVE'
@@ -45,7 +45,7 @@ class CenturionProject(models.Model):
 
     @property
     def raise_finish_date(self):
-        return self.raise_start_date + relativedelta(months=self.raise_months)
+        return self.raise_start_date + relativedelta(months=self.raise_months) if self.raise_start_date else None
 
     @property
     def usd_collected(self):
