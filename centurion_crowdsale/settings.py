@@ -85,9 +85,9 @@ WSGI_APPLICATION = 'centurion_crowdsale.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'centurion-crowdsale'),
-        'USER': os.getenv('POSTGRES_USER', 'centurion-crowdsale'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'centurion-crowdsale'),
+        'NAME': os.getenv('POSTGRES_DB', 'centurion_crowdsale'),
+        'USER': os.getenv('POSTGRES_USER', 'centurion_crowdsale'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'centurion_crowdsale'),
         'HOST': os.getenv('POSTGRES_HOST', '127.0.0.1'),
         'PORT': '5432',
     }
