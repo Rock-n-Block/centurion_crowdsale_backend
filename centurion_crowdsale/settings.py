@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', 'centurion-crowdsale'),
         'USER': os.getenv('POSTGRES_USER', 'centurion-crowdsale'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'centurion-crowdsale'),
-        'HOST': os.getenv('POSTGRES_HOST', 'db'),
+        'HOST': os.getenv('POSTGRES_HOST', '127.0.0.1'),
         'PORT': '5432',
     }
 }
