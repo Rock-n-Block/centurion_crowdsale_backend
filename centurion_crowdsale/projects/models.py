@@ -33,7 +33,7 @@ class CenturionProject(models.Model):
     def status(self):
         today = date.today()
         if today < self.raise_start_date:
-            return 'NOT STARTED'
+            return 'COMING SOON'
         elif today <= self.raise_finish_date:
             return 'ACTIVE'
         elif today < self.raise_finish_date + relativedelta(months=self.months_between_raise_and_staking):

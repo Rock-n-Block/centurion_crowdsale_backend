@@ -47,6 +47,7 @@ class CenturionProjectListSerializer(serializers.ModelSerializer):
         model = CenturionProject
         fields = (
             'id',
+            'status',
             'default_image',
             'project_name',
             'description',
