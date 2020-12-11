@@ -139,6 +139,10 @@ RATES_CHECKER_TIMEOUT = 30
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+USE_X_FORWARDED_HOST = True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 try:
     from centurion_crowdsale.settings_local import *
 except ImportError:
