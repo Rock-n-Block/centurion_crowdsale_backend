@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'centurion_crowdsale.invest_requests',
     'centurion_crowdsale.payments',
+    'centurion_crowdsale.transfers',
     'centurion_crowdsale.vouchers',
     'centurion_crowdsale.rates',
     'centurion_crowdsale.projects',

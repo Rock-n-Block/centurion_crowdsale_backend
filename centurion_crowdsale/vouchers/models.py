@@ -2,12 +2,13 @@ from django.db import models
 import secrets
 from centurion_crowdsale.payments.models import Payment
 from centurion_crowdsale.projects.models import CenturionProject
+from centurion_crowdsale.transfers.models import Transfer
 from centurion_crowdsale.settings import DUCX_NETWORK, IS_TESTNET, DRC20_TOKEN_ABI, GAS_LIMIT
 from web3 import Web3, HTTPProvider
 from centurion_crowdsale.settings_email import *
 from django.core.mail import send_mail
-from centurion_crowdsale.consts import MAX_AMOUNT_LEN
 from django.core.mail import get_connection
+
 
 
 w3 = Web3(HTTPProvider(DUCX_NETWORK['endpoint']))
@@ -40,7 +41,7 @@ class Voucher(models.Model):
 
     def transfer(self, address):
         token_amount = int(self.usd_amount * self.project.token_decimals)
-        transfer = DucatusXNetworkTransfer(
+        transfer = Transfer(
             voucher=self,
             amount=token_amount,
             currency=self.project.token_symbol,
@@ -56,16 +57,6 @@ class Voucher(models.Model):
             transfer.status = 'FAIL'
         transfer.save()
         return transfer
-
-
-class DucatusXNetworkTransfer(models.Model):
-    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=MAX_AMOUNT_LEN, decimal_places=0)
-    currency = models.CharField(max_length=10)
-    ducx_address = models.CharField(max_length=50)
-    tx_hash = models.CharField(max_length=100)
-    tx_error = models.CharField(max_length=100)
-    status = models.CharField(max_length=50, default='WAITING FOR TRANSFER')
 
 
 def get_mail_connection():

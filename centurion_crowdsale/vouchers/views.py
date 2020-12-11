@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from centurion_crowdsale.vouchers.models import Voucher
-from centurion_crowdsale.vouchers.serializers import DucatusXNetworkTransferSerializer
+from centurion_crowdsale.transfers.serializers import TransferSerializer
 from rest_framework.exceptions import PermissionDenied, APIException
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
@@ -18,7 +18,7 @@ class VoucherActivationView(APIView):
             },
             required=['activation_code', 'ducx_address']
         ),
-        responses={200: DucatusXNetworkTransferSerializer()},
+        responses={200: TransferSerializer()},
     )
     def post(self, request):
         activation_code = request.data['activation_code']
@@ -35,7 +35,7 @@ class VoucherActivationView(APIView):
                 raise PermissionDenied(detail='This voucher already used')
             '''
             transfer = voucher.transfer(ducx_address)
-            serializer = DucatusXNetworkTransferSerializer(transfer)
+            serializer = TransferSerializer(transfer)
             return Response(serializer.data, status=200)
         except ObjectDoesNotExist:
             raise PermissionDenied(detail='Invalid activation code')

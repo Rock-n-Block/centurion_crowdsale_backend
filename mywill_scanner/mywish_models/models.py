@@ -9,6 +9,6 @@ engine = create_engine(mywish_pg_engine)
 Base.prepare(engine, reflect=True)
 
 InvestRequests = Base.classes.invest_requests_investrequest
-Transfers = Base.classes.vouchers_ducatusxnetworktransfer
+Transfers = Base.classes.transfers_transfer
 
 session = Session(engine)
