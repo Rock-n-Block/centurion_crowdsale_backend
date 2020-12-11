@@ -12,7 +12,7 @@ class LastBlockPersister:
 
     def get_last_block(self) -> int:
         try:
-            with open(os.path.join('mywill_scannner/', self.base_dir, self.network_name), 'r') as file:
+            with open(os.path.join('mywill_scanner/', self.base_dir, self.network_name), 'r') as file:
                 last_block_number = file.read()
         except FileNotFoundError:
             return 1

@@ -20,6 +20,8 @@ services:
       - db
       - rabbitmq
     restart: unless-stopped
+    volumes:
+      - ./static:/app/static
     networks:
       centurion-net:
   receiver:
@@ -53,6 +55,8 @@ services:
     restart: unless-stopped
     networks:
       centurion-net:
+    volumes:
+      - ./mywill_scanner/settings:/app/mywill_scanner/settings
   rabbitmq:
     image: rabbitmq:3-management-alpine
     env_file: .env
