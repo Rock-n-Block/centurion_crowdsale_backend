@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'centurion_crowdsale.vouchers',
     'centurion_crowdsale.rates',
     'centurion_crowdsale.projects',
+    'centurion_crowdsale.ducx_tokens',
 ]
 
 MIDDLEWARE = [

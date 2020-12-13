@@ -3,15 +3,9 @@ import secrets
 from centurion_crowdsale.payments.models import Payment
 from centurion_crowdsale.projects.models import CenturionProject
 from centurion_crowdsale.transfers.models import Transfer
-from centurion_crowdsale.settings import DUCX_NETWORK, IS_TESTNET, DRC20_TOKEN_ABI, GAS_LIMIT
-from web3 import Web3, HTTPProvider
 from centurion_crowdsale.settings_email import *
 from django.core.mail import send_mail
 from django.core.mail import get_connection
-
-
-
-w3 = Web3(HTTPProvider(DUCX_NETWORK['endpoint']))
 
 
 class Voucher(models.Model):
@@ -39,16 +33,21 @@ class Voucher(models.Model):
         )
         self.is_email_sended = True
 
-    def transfer(self, address):
-        token_amount = int(self.usd_amount * self.project.token_decimals)
+    def activate(self, address):
+        try:
+            token = self.project.token
+        except Exception as e:
+            return None
+
+        token_amount = int(self.usd_amount * token.decimals)
         transfer = Transfer(
             voucher=self,
             amount=token_amount,
-            currency=self.project.token_symbol,
+            currency=token.symbol,
             ducx_address=address,
         )
         try:
-            transfer.tx_hash = mint_tokens(self.project.token_contract_address, address, token_amount)
+            transfer.tx_hash = token.mint(address, token_amount)
             transfer.status = 'WAITING FOR CONFIRM'
             self.is_used = True
             self.save()
@@ -68,19 +67,6 @@ def get_mail_connection():
         use_tls=EMAIL_USE_TLS,
     )
 
-
-def mint_tokens(contract_address, address, amount):
-    contract = w3.eth.contract(address=contract_address, abi=DRC20_TOKEN_ABI)
-    tx_params = {
-        'nonce': w3.eth.getTransactionCount(DUCX_NETWORK['address'], 'pending'),
-        'gasPrice': w3.eth.gasPrice,
-        'gas': GAS_LIMIT,
-    }
-    initial_tx = contract.functions.mint(Web3.toChecksumAddress(address), amount).buildTransaction(tx_params)
-    signed = w3.eth.account.signTransaction(initial_tx, DUCX_NETWORK['private'])
-    tx_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
-    tx_hex = tx_hash.hex()
-    return tx_hex
 
 
 

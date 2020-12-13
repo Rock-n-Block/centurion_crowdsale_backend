@@ -25,10 +25,6 @@ class CenturionProject(models.Model):
     ducx_staking_monthly_percent = models.IntegerField()
     staking_months = models.IntegerField()
 
-    token_contract_address = models.CharField(max_length=100, null=True, default=None)
-    token_decimals = models.IntegerField(null=True, default=None)
-    token_symbol = models.CharField(max_length=10,null=True, default=None)
-
     @property
     def status(self):
         today = date.today()
@@ -71,7 +67,6 @@ class CenturionProject(models.Model):
     @property
     def ducx_staking_total_percent(self):
         return self.staking_months * self.ducx_staking_monthly_percent
-
 
     @property
     def fiat_percent_in_target_raise(self):

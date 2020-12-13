@@ -34,7 +34,9 @@ class VoucherActivationView(APIView):
             if voucher.is_used:
                 raise PermissionDenied(detail='This voucher already used')
             '''
-            transfer = voucher.transfer(ducx_address)
+            transfer = voucher.activate(ducx_address)
+            if transfer is None:
+                raise PermissionDenied(detail='No token associated with project!')
             serializer = TransferSerializer(transfer)
             return Response(serializer.data, status=200)
         except ObjectDoesNotExist:
