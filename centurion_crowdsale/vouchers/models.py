@@ -4,9 +4,10 @@ from centurion_crowdsale.payments.models import Payment
 from centurion_crowdsale.projects.models import CenturionProject
 from centurion_crowdsale.transfers.models import Transfer
 from centurion_crowdsale.quantum.models import QuantumCharge
-from centurion_crowdsale.settings_email import *
+from centurion_crowdsale.vouchers.voucher_email import html_style, voucher_html_body
 from django.core.mail import send_mail
 from django.core.mail import get_connection
+from centurion_crowdsale.settings import EMAIL_HOST_USER, EMAIL_HOST, EMAIL_PORT, EMAIL_USE_TLS, EMAIL_HOST_PASSWORD
 
 
 class Voucher(models.Model):
@@ -23,15 +24,18 @@ class Voucher(models.Model):
     def send_mail(self):
         connection = get_mail_connection()
         html_body = voucher_html_body.format(
-            voucher_code=self.activation_code
+            tokens_purchased=self.usd_amount,
+            project_leased=self.project.project_name,
+            period_of_lease=self.project.staking_months,
+            activate_code=self.activation_code
         )
         send_mail(
-            'Your DUC Purchase Confirmation for ${}'.format(round(self.usd_amount, 2)),
+            'Centurion Lease Confirmation for ${}'.format(round(self.usd_amount, 2)),
             '',
             EMAIL_HOST_USER,
             [self.payment.invest_request.email if self.payment else self.quantum_charge.email],
             connection=connection,
-            html_message=warning_html_style + html_body,
+            html_message=html_style + html_body,
         )
         self.is_email_sended = True
         self.save()
