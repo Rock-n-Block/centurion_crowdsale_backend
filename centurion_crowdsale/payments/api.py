@@ -38,6 +38,7 @@ def parse_payment_message(message):
 
         try:
             voucher.send_mail()
+            voucher.save()
         except Exception as e:
             print(repr(e))
     else:

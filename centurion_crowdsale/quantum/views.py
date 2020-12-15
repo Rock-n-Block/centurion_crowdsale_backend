@@ -95,6 +95,7 @@ def change_charge_status(request):
 
             try:
                 voucher.send_mail()
+                voucher.save()
             except Exception as e:
                 print('Voucher email sending exception:', repr(e))
     return Response(200)
