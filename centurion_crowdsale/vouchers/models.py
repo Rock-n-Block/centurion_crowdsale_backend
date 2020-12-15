@@ -3,6 +3,7 @@ import secrets
 from centurion_crowdsale.payments.models import Payment
 from centurion_crowdsale.projects.models import CenturionProject
 from centurion_crowdsale.transfers.models import Transfer
+from centurion_crowdsale.quantum.models import QuantumCharge
 from centurion_crowdsale.settings_email import *
 from django.core.mail import send_mail
 from django.core.mail import get_connection
@@ -10,7 +11,8 @@ from django.core.mail import get_connection
 
 class Voucher(models.Model):
     project = models.ForeignKey(CenturionProject, on_delete=models.CASCADE)
-    payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
+    payment = models.OneToOneField(Payment, on_delete=models.CASCADE, null=True)
+    quantum_charge = models.OneToOneField(QuantumCharge, on_delete=models.CASCADE, null=True)
     activation_code = models.CharField(max_length=50, unique=True, default=secrets.token_urlsafe)
     usd_amount = models.FloatField()
     is_used = models.BooleanField(default=False)
@@ -27,11 +29,12 @@ class Voucher(models.Model):
             'Your DUC Purchase Confirmation for ${}'.format(round(self.usd_amount, 2)),
             '',
             EMAIL_HOST_USER,
-            [self.payment.invest_request.email],
+            [self.payment.invest_request.email if self.payment else self.quantum_charge.email],
             connection=connection,
             html_message=warning_html_style + html_body,
         )
         self.is_email_sended = True
+        self.save()
 
     def activate(self, address):
         try:
@@ -66,10 +69,3 @@ def get_mail_connection():
         password=EMAIL_HOST_PASSWORD,
         use_tls=EMAIL_USE_TLS,
     )
-
-
-
-
-
-
-

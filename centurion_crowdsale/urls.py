@@ -22,6 +22,7 @@ from centurion_crowdsale.invest_requests.views import InvestRequestView, Validat
 from centurion_crowdsale.vouchers.views import VoucherActivationView
 from centurion_crowdsale.projects.views import CenturionProjectView, CenturionProjectsView
 from centurion_crowdsale.rates.views import UsdRateView
+from centurion_crowdsale.quantum.views import create_charge, change_charge_status
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -45,5 +46,7 @@ urlpatterns = [
     path('api/v1/projects/<str:id>/invest', InvestRequestView.as_view()),
     path('api/v1/projects/<str:id>/validate_usd_from_duc', ValidateUsdFromDucAmountView.as_view()),
     path('api/v1/projects/<str:id>/', CenturionProjectView.as_view()),
+    path('api/v1/projects/<str:id>/create_charge/', create_charge),
+    path('api/v1/change_charge_status/', change_charge_status),
     path('api/v1/projects/', CenturionProjectsView.as_view()),
 ]
