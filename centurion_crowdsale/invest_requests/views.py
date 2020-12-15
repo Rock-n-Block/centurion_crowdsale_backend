@@ -39,7 +39,11 @@ class InvestRequestView(APIView):
         print(f'INVEST REQUEST data: {request_data}', flush=True)
         email = request_data['email']
         project = CenturionProject.objects.get(string_id=id)
-        invest_request = get_or_create_invest_request(email, project)
+
+        invest_request = InvestRequest(email=email, project=project)
+        invest_request.save()
+        invest_request.generate_keys()
+        invest_request.save()
 
         serializer = InvestRequestSerializer(invest_request)
         return Response(serializer.data, status=201)
@@ -67,14 +71,3 @@ class ValidateUsdFromDucAmountView(APIView):
 
         return Response({'amount_valid': duc_amount + float(project.duc_collected) <= project.duc_target_raise}, status=201)
 
-
-def get_or_create_invest_request(email, project):
-    invest_request_filter = InvestRequest.objects.filter(email=email, project=project)
-    if not invest_request_filter:
-        invest_request = InvestRequest(email=email, project=project)
-        invest_request.save()
-        invest_request.generate_keys()
-        invest_request.save()
-    else:
-        invest_request = invest_request_filter.first()
-    return invest_request
