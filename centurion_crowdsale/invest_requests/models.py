@@ -14,15 +14,15 @@ class InvestRequest(models.Model):
     eth_address = models.CharField(max_length=50)
 
     def generate_keys(self):
-        root_public_key = HD_ROOT_KEYS['public']
-        root_key = BIP32Key.fromExtendedKey(root_public_key, public=True)
+        eth_btc_root_public_key = HD_ROOT_KEYS['ETH-BTC']['public']
+        root_key = BIP32Key.fromExtendedKey(eth_btc_root_public_key, public=True)
         child_key = root_key.ChildKey(self.id)
 
         self.btc_address = child_key.Address()
         self.eth_address = keys.PublicKey(child_key.K.to_string()).to_checksum_address().lower()
 
-        if not IS_TESTNET:
-            duc_root_key = DucatusWallet.deserialize(root_public_key)
-            self.duc_address = duc_root_key.get_child(self.id, is_prime=False).to_address() if not IS_TESTNET else ''
+        duc_root_public_key = HD_ROOT_KEYS['DUC']['public']
+        duc_root_key = DucatusWallet.deserialize(duc_root_public_key)
+        self.duc_address = duc_root_key.get_child(self.id, is_prime=False).to_address()
 
         self.save()
