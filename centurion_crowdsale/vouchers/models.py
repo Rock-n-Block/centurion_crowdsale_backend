@@ -15,7 +15,7 @@ class Voucher(models.Model):
     payment = models.OneToOneField(Payment, on_delete=models.CASCADE, null=True)
     quantum_charge = models.OneToOneField(QuantumCharge, on_delete=models.CASCADE, null=True)
     activation_code = models.CharField(max_length=50, unique=True, default=secrets.token_urlsafe)
-    usd_amount = models.FloatField()
+    usd_amount = models.DecimalField(max_digits=100, decimal_places=2)
     is_used = models.BooleanField(default=False)
     is_email_sended = models.BooleanField(default=False)
     publish_date = models.DateTimeField(auto_now_add=True)
@@ -30,7 +30,7 @@ class Voucher(models.Model):
             activate_code=self.activation_code
         )
         send_mail(
-            'Centurion Lease Confirmation for ${}'.format(round(self.usd_amount, 2)),
+            f'Centurion Lease Confirmation for ${self.usd_amount}',
             '',
             EMAIL_HOST_USER,
             [self.payment.invest_request.email if self.payment else self.quantum_charge.email],

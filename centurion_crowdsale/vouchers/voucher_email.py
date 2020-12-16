@@ -151,7 +151,7 @@ voucher_html_body = """<body ducatus bgcolor="#ffffff">
                   </tr>
                   <tr>
                     <td class="text text-cont">
-                      Period of Lease: {period_of_lease}
+                      Period of Lease: {period_of_lease} months
                     </td>
                   </tr>
                   <tr>
