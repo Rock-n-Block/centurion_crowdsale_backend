@@ -6,14 +6,15 @@ from centurion_crowdsale.invest_requests.models import InvestRequest
 from centurion_crowdsale.projects.models import CenturionProject
 from centurion_crowdsale.invest_requests.serializers import InvestRequestSerializer
 from centurion_crowdsale.settings import DUC_RATE
+import decimal
 
 
-validate_usd_from_duc_amount_result = openapi.Response(
-    description='status of validated USD amount',
+validate_usd_amount_result = openapi.Response(
+    description='status of validated USD amount: `FEW`, `OK` or `MUCH`',
     schema=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
-            'amount_valid': openapi.Schema(type=openapi.TYPE_BOOLEAN)
+            'status': openapi.Schema(type=openapi.TYPE_STRING)
         },
     )
 )
@@ -49,7 +50,7 @@ class InvestRequestView(APIView):
         return Response(serializer.data, status=201)
 
 
-class ValidateUsdFromDucAmountView(APIView):
+class ValidateUsdAmountView(APIView):
     @swagger_auto_schema(
         operation_description="post USD amount to check if DUC limit is exceeded",
         request_body=openapi.Schema(
@@ -57,17 +58,33 @@ class ValidateUsdFromDucAmountView(APIView):
             manual_parameters=[
                 openapi.Parameter('id', openapi.IN_PATH, type=openapi.TYPE_STRING),
             ],
-            required=['usd_amount'],
+            required=['usd_amount', 'currency'],
             properties={
-                'usd_amount': openapi.Schema(type=openapi.TYPE_INTEGER),
+                'usd_amount': openapi.Schema(type=openapi.TYPE_NUMBER),
+                'currency': openapi.Schema(type=openapi.TYPE_STRING),
             },
         ),
-        responses={200: validate_usd_from_duc_amount_result},
+        responses={200: validate_usd_amount_result},
     )
     def post(self, request, id):
-        usd_amount = request.data['usd_amount']
-        duc_amount = usd_amount / DUC_RATE
+        data = request.data
+        usd_amount = decimal.Decimal(data['usd_amount'])
+        currency = data['currency']
         project = CenturionProject.objects.get(string_id=id)
 
-        return Response({'amount_valid': duc_amount + float(project.duc_collected) <= project.duc_target_raise}, status=201)
+        if currency == 'DUC':
+            if usd_amount < project.usd_minimal_purchase:
+                status = 'FEW'
+            elif usd_amount + project.usd_collected_from_duc > project.usd_from_duc_target_raise:
+                status = 'MUCH'
+            else:
+                status = 'OK'
+        else:
+            if usd_amount < project.usd_minimal_purchase:
+                status = 'FEW'
+            elif usd_amount + project.usd_collected_from_duc > project.usd_from_fiat_target_raise:
+                status = 'MUCH'
+            else:
+                status = 'OK'
 
+        return Response({'status': status}, status=200)
