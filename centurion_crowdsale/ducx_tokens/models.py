@@ -7,7 +7,7 @@ w3 = Web3(HTTPProvider(DUCX_NETWORK['endpoint']))
 
 
 class DucxToken(models.Model):
-    project = models.OneToOneField(CenturionProject, on_delete=models.CASCADE)
+    project = models.OneToOneField(CenturionProject, primary_key=True, on_delete=models.CASCADE)
     contract_address = models.CharField(max_length=100)
     decimals = models.IntegerField()
     symbol = models.CharField(max_length=10)

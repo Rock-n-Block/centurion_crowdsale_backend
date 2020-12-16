@@ -3,6 +3,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from centurion_crowdsale.settings import DUC_RATE
 from django.contrib.postgres.fields import ArrayField
+from centurion_crowdsale.transfers.models import Transfer
 
 
 class CenturionProject(models.Model):
@@ -47,10 +48,12 @@ class CenturionProject(models.Model):
     def usd_collected(self):
         return self.usd_collected_from_fiat + self.usd_collected_from_duc
 
-    # TODO: implement
     @property
     def investors(self):
-        return 0
+        if hasattr(self, 'ducxtoken'):
+            return len(Transfer.objects.filter(currency=self.ducxtoken.symbol).values('ducx_address').distinct())
+        else:
+            return 0
 
     @property
     def duc_target_raise(self):
