@@ -52,6 +52,7 @@ services:
       dockerfile: dockerfiles/scanner.Dockerfile
     depends_on:
       - db
+      - rabbitmq
     restart: unless-stopped
     networks:
       centurion-net:

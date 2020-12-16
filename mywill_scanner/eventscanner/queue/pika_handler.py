@@ -1,5 +1,6 @@
 import pika
 import json
+import os
 
 
 def send_to_backend(type, queue, message):
