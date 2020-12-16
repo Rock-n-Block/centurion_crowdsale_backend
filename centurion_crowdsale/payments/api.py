@@ -25,7 +25,7 @@ def parse_payment_message(message):
 
         usd_rate = getattr(rate_obj, payment.currency)
         usd_amount = payment.amount / DECIMALS[payment.currency] / usd_rate
-        if usd_amount < invest_request.project.minimal_purchase_in_usd - USD_MINIMAL_PURCHASE_BIAS:
+        if usd_amount < invest_request.project.usd_minimal_purchase - USD_MINIMAL_PURCHASE_BIAS:
             print("NOT ENOUGH MONEY")
             return
 
