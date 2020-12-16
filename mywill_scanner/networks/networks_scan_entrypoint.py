@@ -7,6 +7,7 @@ sys.path.append(BASE_DIR)
 
 from networks import EthMaker, BTCMaker
 from settings.settings_local import NETWORKS
+from eventscanner.queue.pika_handler import get_rabbitmq_connection
 
 networks = {
     'ETHEREUM_MAINNET': EthMaker,
@@ -28,6 +29,11 @@ class ScanEntrypoint(threading.Thread):
 
 
 if __name__ == '__main__':
+    # check if rabbitmq has started
+    # if not, raising exception for docker to restart
+    conn = get_rabbitmq_connection()
+    conn.close()
+
     for network_name, network_maker in networks.items():
         scan = ScanEntrypoint(network_name, network_maker, NETWORKS[network_name]['polling_interval'],
                               NETWORKS[network_name]['commitment_chain_length'])
