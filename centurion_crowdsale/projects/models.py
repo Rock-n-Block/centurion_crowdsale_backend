@@ -3,7 +3,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from centurion_crowdsale.settings import DUC_RATE
 from django.contrib.postgres.fields import ArrayField
-from centurion_crowdsale.transfers.models import Transfer
+from centurion_crowdsale.vouchers.models import Voucher
 
 
 class CenturionProject(models.Model):
@@ -50,10 +50,7 @@ class CenturionProject(models.Model):
 
     @property
     def investors(self):
-        if hasattr(self, 'ducxtoken'):
-            return len(Transfer.objects.filter(currency=self.ducxtoken.symbol).values('ducx_address').distinct())
-        else:
-            return 0
+        return len(Voucher.objects.filter(project=self).values('email').distinct())
 
     @property
     def duc_target_raise(self):

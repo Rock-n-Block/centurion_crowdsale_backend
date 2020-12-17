@@ -91,6 +91,7 @@ def change_charge_status(request):
                 project=project,
                 quantum_charge=charge,
                 usd_amount=charge.usd_amount,
+                email=charge.email,
             )
             voucher.save()
 

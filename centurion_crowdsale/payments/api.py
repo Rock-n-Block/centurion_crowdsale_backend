@@ -34,6 +34,7 @@ def parse_payment_message(message):
             project=project,
             payment=payment,
             usd_amount=f'{usd_amount:.{2}f}',
+            email=invest_request.email,
         )
         voucher.save()
 

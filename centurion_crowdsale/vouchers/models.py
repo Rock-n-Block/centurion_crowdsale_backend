@@ -20,6 +20,7 @@ class Voucher(models.Model):
     is_email_sended = models.BooleanField(default=False)
     publish_date = models.DateTimeField(auto_now_add=True)
     activation_date = models.DateTimeField(null=True, default=None)
+    email = models.CharField(max_length=50, default='')
 
     def send_mail(self):
         connection = get_mail_connection()
@@ -33,7 +34,7 @@ class Voucher(models.Model):
             f'Your Lease Confirmation for ${self.usd_amount}',
             '',
             EMAIL_HOST_USER,
-            [self.payment.invest_request.email if self.payment else self.quantum_charge.email],
+            [self.email],
             connection=connection,
             html_message=html_style + html_body,
         )
