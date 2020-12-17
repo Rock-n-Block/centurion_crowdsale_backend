@@ -30,7 +30,7 @@ class Voucher(models.Model):
             activate_code=self.activation_code
         )
         send_mail(
-            f'Centurion Lease Confirmation for ${self.usd_amount}',
+            f'Your Lease Confirmation for ${self.usd_amount}',
             '',
             EMAIL_HOST_USER,
             [self.payment.invest_request.email if self.payment else self.quantum_charge.email],
