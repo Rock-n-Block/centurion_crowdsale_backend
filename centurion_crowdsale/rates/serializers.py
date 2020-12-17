@@ -5,4 +5,4 @@ from centurion_crowdsale.rates.models import UsdRate
 class UsdRateSerializer(serializers.ModelSerializer):
     class Meta:
         model = UsdRate
-        fields = ('BTC', 'ETH', 'USDT', 'USDC')
+        fields = ('BTC', 'ETH', 'USDT', 'USDC', 'DUC')
