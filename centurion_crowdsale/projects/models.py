@@ -31,14 +31,23 @@ class CenturionProject(models.Model):
         today = date.today()
         if not self.raise_start_date or today < self.raise_start_date:
             return 'COMING SOON'
+
         elif today <= self.raise_finish_date:
+            if self.usd_collected >= self.usd_target_raise:
+                return 'COMPLETED'
             return 'ACTIVE'
+        else:
+            if self.usd_collected >= self.usd_target_raise:
+                return 'COMPLETED'
+            return 'EXPIRED'
+        '''
         elif today < self.raise_finish_date + relativedelta(months=self.months_between_raise_and_staking):
             return 'WAITING FOR STAKING'
         elif today < self.raise_finish_date + relativedelta(
                 months=self.months_between_raise_and_staking + self.staking_months):
             return 'STAKING'
         return 'FINISHED'
+        '''
 
     @property
     def raise_finish_date(self):
