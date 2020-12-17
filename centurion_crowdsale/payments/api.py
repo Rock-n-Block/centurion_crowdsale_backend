@@ -32,7 +32,7 @@ def parse_payment_message(message):
         voucher = Voucher(
             project=payment.invest_request.project,
             payment=payment,
-            usd_amount=usd_amount,
+            usd_amount=f'{usd_amount:.{2}f}',
         )
         voucher.save()
 
