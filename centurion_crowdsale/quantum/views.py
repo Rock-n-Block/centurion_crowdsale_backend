@@ -86,12 +86,15 @@ def change_charge_status(request):
         else:
             charge.status = status
             charge.save()
+            project = charge.project
             voucher = Voucher(
-                project=charge.project,
+                project=project,
                 quantum_charge=charge,
                 usd_amount=charge.usd_amount,
             )
             voucher.save()
+
+            project.usd_collected_from_fiat += voucher.usd_amount
 
             try:
                 voucher.send_mail()

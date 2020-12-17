@@ -14,6 +14,7 @@ def parse_payment_message(message):
             raise Exception('You should run rates_checker.py at least once')
 
         invest_request = InvestRequest.objects.get(id=message['exchangeId'])
+        project = invest_request.project
 
         payment = Payment(
             invest_request=invest_request,
@@ -30,11 +31,17 @@ def parse_payment_message(message):
             return
 
         voucher = Voucher(
-            project=payment.invest_request.project,
+            project=project,
             payment=payment,
             usd_amount=f'{usd_amount:.{2}f}',
         )
         voucher.save()
+
+        if payment.currency == 'DUC':
+            project.duc_collected += payment.amount
+            project.usd_collected_from_duc += voucher.usd_amount
+        else:
+            project.usd_collected_from_fiat += voucher.usd_amount
 
         try:
             voucher.send_mail()
