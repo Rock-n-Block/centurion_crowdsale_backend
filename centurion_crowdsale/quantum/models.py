@@ -2,7 +2,6 @@ from django.db import models
 import requests
 import json
 from django.utils import timezone
-from centurion_crowdsale.projects.models import CenturionProject
 from centurion_crowdsale.settings import QUANTUM_CLIENT_SECRET, QUANTUM_CLIENT_ID, QUANTUM_API_URL, \
     QUANTUM_SESSION_TIMEOUT_IN_SECS
 
@@ -30,7 +29,7 @@ class QuantumAccess(models.Model):
 
 
 class QuantumCharge(models.Model):
-    project = models.ForeignKey(CenturionProject, on_delete=models.CASCADE, null=True)
+    project = models.ForeignKey('projects.CenturionProject', on_delete=models.CASCADE, null=True)
     charge_id = models.IntegerField(unique=True)
     status = models.CharField(max_length=50)
     usd_amount = models.DecimalField(max_digits=100, decimal_places=2)

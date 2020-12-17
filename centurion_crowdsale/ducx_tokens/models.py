@@ -1,13 +1,12 @@
 from django.db import models
 from web3 import Web3, HTTPProvider
 from centurion_crowdsale.settings import DUCX_NETWORK, DRC20_TOKEN_ABI, GAS_LIMIT
-from centurion_crowdsale.projects.models import CenturionProject
 
 w3 = Web3(HTTPProvider(DUCX_NETWORK['endpoint']))
 
 
 class DucxToken(models.Model):
-    project = models.OneToOneField(CenturionProject, primary_key=True, on_delete=models.CASCADE)
+    project = models.OneToOneField('projects.CenturionProject', primary_key=True, on_delete=models.CASCADE)
     contract_address = models.CharField(max_length=100)
     decimals = models.IntegerField()
     symbol = models.CharField(max_length=10)

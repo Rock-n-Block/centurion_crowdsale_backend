@@ -1,9 +1,6 @@
 from django.db import models
 import secrets
-from centurion_crowdsale.payments.models import Payment
-from centurion_crowdsale.projects.models import CenturionProject
 from centurion_crowdsale.transfers.models import Transfer
-from centurion_crowdsale.quantum.models import QuantumCharge
 from centurion_crowdsale.vouchers.voucher_email import html_style, voucher_html_body
 from django.core.mail import send_mail
 from django.core.mail import get_connection
@@ -11,9 +8,9 @@ from centurion_crowdsale.settings import EMAIL_HOST_USER, EMAIL_HOST, EMAIL_PORT
 
 
 class Voucher(models.Model):
-    project = models.ForeignKey(CenturionProject, on_delete=models.CASCADE)
-    payment = models.OneToOneField(Payment, on_delete=models.CASCADE, null=True)
-    quantum_charge = models.OneToOneField(QuantumCharge, on_delete=models.CASCADE, null=True)
+    project = models.ForeignKey('projects.CenturionProject', on_delete=models.CASCADE)
+    payment = models.OneToOneField('payments.Payment', on_delete=models.CASCADE, null=True)
+    quantum_charge = models.OneToOneField('quantum.QuantumCharge', on_delete=models.CASCADE, null=True)
     activation_code = models.CharField(max_length=50, unique=True, default=secrets.token_urlsafe)
     usd_amount = models.DecimalField(max_digits=100, decimal_places=2)
     is_used = models.BooleanField(default=False)

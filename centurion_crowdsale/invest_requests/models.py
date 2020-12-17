@@ -1,5 +1,4 @@
 from django.db import models
-from centurion_crowdsale.projects.models import CenturionProject
 from centurion_crowdsale.settings import IS_TESTNET, HD_ROOT_KEYS
 from bip32utils import BIP32Key
 from eth_keys import keys
@@ -7,7 +6,7 @@ from centurion_crowdsale.bip32_ducatus import DucatusWallet
 
 
 class InvestRequest(models.Model):
-    project = models.ForeignKey(CenturionProject, on_delete=models.CASCADE)
+    project = models.ForeignKey('projects.CenturionProject', on_delete=models.CASCADE)
     email = models.CharField(max_length=50)
     duc_address = models.CharField(max_length=50)
     btc_address = models.CharField(max_length=50)
