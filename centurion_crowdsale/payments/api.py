@@ -4,6 +4,7 @@ from centurion_crowdsale.vouchers.models import Voucher
 from centurion_crowdsale.rates.models import UsdRate
 from centurion_crowdsale.consts import DECIMALS
 from centurion_crowdsale.settings import USD_MINIMAL_PURCHASE_BIAS
+import decimal
 
 
 def parse_payment_message(message):
@@ -33,7 +34,7 @@ def parse_payment_message(message):
         voucher = Voucher(
             project=project,
             payment=payment,
-            usd_amount=f'{usd_amount:.{2}f}',
+            usd_amount=decimal.Decimal(f'{usd_amount:.{2}f}'),
             email=invest_request.email,
         )
         voucher.save()
