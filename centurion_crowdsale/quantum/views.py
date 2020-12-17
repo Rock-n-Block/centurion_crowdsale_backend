@@ -96,6 +96,7 @@ def change_charge_status(request):
             voucher.save()
 
             project.usd_collected_from_fiat += voucher.usd_amount
+            project.save()
 
             try:
                 voucher.send_mail()

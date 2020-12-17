@@ -43,6 +43,7 @@ def parse_payment_message(message):
             project.usd_collected_from_duc += voucher.usd_amount
         else:
             project.usd_collected_from_fiat += voucher.usd_amount
+        project.save()
 
         try:
             voucher.send_mail()
