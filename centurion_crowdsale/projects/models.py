@@ -50,6 +50,11 @@ class CenturionProject(models.Model):
         '''
 
     @property
+    def is_staking_finished(self):
+        return date.today() > self.raise_finish_date + \
+               relativedelta(months=self.months_between_raise_and_staking + self.staking_months - 1)
+
+    @property
     def raise_finish_date(self):
         return self.raise_start_date + relativedelta(months=self.raise_months) if self.raise_start_date else None
 

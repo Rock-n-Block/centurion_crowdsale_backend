@@ -39,11 +39,7 @@ class Voucher(models.Model):
         self.save()
 
     def activate(self, address):
-        try:
-            token = self.project.token
-        except Exception as e:
-            return None
-
+        token = self.project.ducxtoken
         token_amount = int(self.usd_amount * token.decimals)
         transfer = Transfer(
             voucher=self,
@@ -59,8 +55,9 @@ class Voucher(models.Model):
         except Exception as e:
             transfer.tx_error = repr(e)
             transfer.status = 'FAIL'
+            print(f'Token transfer fail: {transfer.tx_error}', flush=True)
         transfer.save()
-        return transfer
+        return transfer.tx_hash
 
 
 def get_mail_connection():
