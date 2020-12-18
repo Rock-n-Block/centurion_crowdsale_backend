@@ -49,7 +49,7 @@ def parse_payment_message(message):
             voucher.save()
             project = invest_request.project
             if payment.currency == 'DUC':
-                project.duc_collcted += payment.amount
+                project.duc_collected += payment.amount / DECIMALS['DUC']
                 project.usd_collected_from_duc += voucher.usd_amount
             else:
                 project.usd_collected_from_fiat += voucher.usd_amount
