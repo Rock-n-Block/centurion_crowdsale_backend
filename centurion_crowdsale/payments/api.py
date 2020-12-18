@@ -7,16 +7,35 @@ from centurion_crowdsale.settings import USD_MINIMAL_PURCHASE_BIAS
 import decimal
 
 
+def create_voucher(payment):
+    rate_obj = UsdRate.objects.first()
+    if not rate_obj:
+        raise Exception('You should run rates_checker.py at least once')
+
+    usd_rate = getattr(rate_obj, payment.currency)
+    usd_amount = payment.amount / DECIMALS[payment.currency] / usd_rate
+
+    project = payment.invest_request.project
+    if usd_amount < project.usd_minimal_purchase:
+        if usd_amount + USD_MINIMAL_PURCHASE_BIAS < project.usd_minimal_purchase:
+            print("CREATING VOUCHER: not enough money!", flush=True)
+            return None
+        else:
+            usd_amount = project.usd_minimal_purchase
+
+    voucher = Voucher(
+        project=project,
+        payment=payment,
+        usd_amount=decimal.Decimal(f'{usd_amount:.{2}f}'),
+        email=payment.invest_request.email,
+    )
+    return voucher
+
+
 def parse_payment_message(message):
     tx_hash = message['transactionHash']
     if not Payment.objects.filter(tx_hash=tx_hash).count() > 0:
-        rate_obj = UsdRate.objects.first()
-        if not rate_obj:
-            raise Exception('You should run rates_checker.py at least once')
-
         invest_request = InvestRequest.objects.get(id=message['exchangeId'])
-        project = invest_request.project
-
         payment = Payment(
             invest_request=invest_request,
             currency=message['currency'],
@@ -25,31 +44,21 @@ def parse_payment_message(message):
         )
         payment.save()
 
-        usd_rate = getattr(rate_obj, payment.currency)
-        usd_amount = payment.amount / DECIMALS[payment.currency] / usd_rate
-        if usd_amount < invest_request.project.usd_minimal_purchase - USD_MINIMAL_PURCHASE_BIAS:
-            print("NOT ENOUGH MONEY")
-            return
-
-        voucher = Voucher(
-            project=project,
-            payment=payment,
-            usd_amount=decimal.Decimal(f'{usd_amount:.{2}f}'),
-            email=invest_request.email,
-        )
-        voucher.save()
-
-        if payment.currency == 'DUC':
-            project.duc_collected += payment.amount
-            project.usd_collected_from_duc += voucher.usd_amount
-        else:
-            project.usd_collected_from_fiat += voucher.usd_amount
-        project.save()
-
-        try:
-            voucher.send_mail()
+        voucher = create_voucher(payment)
+        if voucher:
             voucher.save()
-        except Exception as e:
-            print(repr(e))
+            project = invest_request.project
+            if payment.currency == 'DUC':
+                project.duc_collcted += payment.amount
+                project.usd_collected_from_duc += voucher.usd_amount
+            else:
+                project.usd_collected_from_fiat += voucher.usd_amount
+            project.save()
+
+            try:
+                voucher.send_mail()
+                voucher.save()
+            except Exception as e:
+                print(repr(e))
     else:
         print(f'PARSING PAYMENT: tx {tx_hash} already registered', flush=True)
