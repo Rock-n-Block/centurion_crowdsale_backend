@@ -48,7 +48,7 @@ class Voucher(models.Model):
             ducx_address=address,
         )
         try:
-            transfer.tx_hash = token.mint(address, token_amount)
+            transfer.tx_hash = token.transfer(address, token_amount)
             transfer.status = 'WAITING FOR CONFIRM'
             self.is_used = True
             self.save()
