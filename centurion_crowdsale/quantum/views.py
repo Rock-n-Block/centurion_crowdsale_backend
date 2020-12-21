@@ -77,15 +77,17 @@ def change_charge_status(request):
         try:
             charge = QuantumCharge.objects.get(charge_id=charge_id)
         except ObjectDoesNotExist:
-            print(f'Cannot fild charge with id {charge_id} in database!', flush=True)
+            print(f'Cannot find charge with id {charge_id} in database!', flush=True)
             return Response(200)
 
         if charge.status == 'Withdrawn':
             print(f'Voucher for charge with id {charge_id} was already created!', flush=True)
             return Response(200)
-        else:
-            charge.status = status
-            charge.save()
+
+        charge.status = status
+        charge.save()
+
+        if status == 'Withdrawn':
             project = charge.project
             voucher = Voucher(
                 project=project,
@@ -102,5 +104,5 @@ def change_charge_status(request):
                 voucher.send_mail()
                 voucher.save()
             except Exception as e:
-                print('Voucher email sending exception:', repr(e))
+                print('Voucher email sending exception:', repr(e), flush=True)
     return Response(200)
