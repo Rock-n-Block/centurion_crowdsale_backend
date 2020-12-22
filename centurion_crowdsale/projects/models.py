@@ -7,9 +7,10 @@ from centurion_crowdsale.vouchers.models import Voucher
 
 
 class CenturionProject(models.Model):
+    token = models.OneToOneField('ducx_tokens.DucxToken', null=True, on_delete=models.SET_NULL, default=None)
     category = models.CharField(max_length=20)
     project_name = models.CharField(max_length=50)
-    string_id = models.CharField(max_length=50, unique=True)
+    string_id = models.CharField(max_length=50, unique=True, primary_key=True)
     description_title = models.CharField(max_length=50)
     description = models.TextField(default='')
     images = ArrayField(models.CharField(max_length=50), default=list)
