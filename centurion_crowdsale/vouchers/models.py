@@ -14,7 +14,7 @@ class Voucher(models.Model):
     activation_code = models.CharField(max_length=50, unique=True, default=secrets.token_urlsafe)
     usd_amount = models.DecimalField(max_digits=100, decimal_places=2)
     is_used = models.BooleanField(default=False)
-    is_email_sended = models.BooleanField(default=False)
+    is_email_sent = models.BooleanField(default=False)
     publish_date = models.DateTimeField(auto_now_add=True)
     activation_date = models.DateTimeField(null=True, default=None)
     email = models.CharField(max_length=50, default='')
@@ -35,7 +35,7 @@ class Voucher(models.Model):
             connection=connection,
             html_message=html_style + html_body,
         )
-        self.is_email_sended = True
+        self.is_email_sent = True
         self.save()
 
     def activate(self, address):
