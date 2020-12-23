@@ -56,7 +56,7 @@ class VoucherActivationView(APIView):
         if voucher.is_used:
             return Response({'detail': 'USED'}, status=403)
 
-        if voucher.project.is_staking_finished():
+        if voucher.project.is_staking_finished:
             return Response({'detail': 'EXPIRED'}, status=403)
 
         tx_hash = voucher.activate(ducx_address)
