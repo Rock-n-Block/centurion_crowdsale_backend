@@ -40,7 +40,7 @@ class Voucher(models.Model):
 
     def activate(self, address):
         token = self.project.token
-        token_amount = int(self.usd_amount * token.decimals)
+        token_amount = int(self.usd_amount * (10 ** token.decimals))
         transfer = Transfer(
             voucher=self,
             amount=token_amount,
