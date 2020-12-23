@@ -12,8 +12,8 @@ from eventscanner.queue.pika_handler import get_rabbitmq_connection
 networks = {
     'ETHEREUM_MAINNET': EthMaker,
     #'DUCATUSX_MAINNET': EthMaker,
-    #'BTC_MAINNET': BTCMaker,
-    #'DUCATUS_MAINNET': BTCMaker,
+    'BTC_MAINNET': BTCMaker,
+    'DUCATUS_MAINNET': BTCMaker,
 
 }
 
