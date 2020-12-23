@@ -45,7 +45,7 @@ class CenturionProject(models.Model):
     @property
     def is_staking_finished(self):
         raise_finish_date = datetime.fromtimestamp(self.raise_finish_timestamp)
-        staking_finish_date = raise_finish_date + relativedelta(months=self.months_between_raise_and_staking + self.staking_moinths - 1)
+        staking_finish_date = raise_finish_date + relativedelta(months=self.months_between_raise_and_staking + self.staking_months - 1)
         return timezone.now().timestamp() > staking_finish_date.timestamp()
 
     @property
