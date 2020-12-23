@@ -1,17 +1,21 @@
 from rest_framework import serializers
 from centurion_crowdsale.projects.models import CenturionProject
+from centurion_crowdsale.ducx_tokens.models import DucxToken
+from centurion_crowdsale.ducx_tokens.serializers import DucxTokenSerializer
 
 
 class CenturionProjectSerializer(serializers.ModelSerializer):
+    token = DucxTokenSerializer()
+
     class Meta:
         model = CenturionProject
         extra_kwargs = {
-            'id': {'read_only': True},
             'usd_collected_from_fiat': {'read_only': True},
             'usd_collected_from_duc': {'read_only': True},
-            'duc_collected': {'read_only': True}
+            'duc_collected': {'read_only': True},
         }
         fields = (
+            'token',
             'string_id',
             'category',
             'status',
@@ -41,17 +45,20 @@ class CenturionProjectSerializer(serializers.ModelSerializer):
             'duc_target_raise',
         )
 
+    def create(self, validated_data):
+        token_validated_data = validated_data['token']
+        token = DucxToken.objects.create(**token_validated_data)
+        validated_data['token'] = token
+        project = CenturionProject.objects.create(**validated_data)
+        return project
 
-class CenturionProjectListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CenturionProject
-        fields = (
-            'string_id',
-            'status',
-            'default_image',
-            'project_name',
-            'description',
-            'raise_finish_date',
-            'usd_collected',
-            'usd_target_raise'
-        )
+    def update(self, instance, validated_data):
+        token_validated_data = validated_data.pop('token')
+        token = instance.token
+        for attr, value in token_validated_data.items():
+            setattr(token, attr, value)
+        token.save()
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance

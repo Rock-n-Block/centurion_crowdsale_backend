@@ -26,7 +26,7 @@ class InvestRequestView(APIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             manual_parameters=[
-                openapi.Parameter('id', openapi.IN_PATH, type=openapi.TYPE_STRING),
+                openapi.Parameter('string_id', openapi.IN_PATH, type=openapi.TYPE_STRING),
             ],
             required=['email'],
             properties={
@@ -35,11 +35,11 @@ class InvestRequestView(APIView):
         ),
         responses={201: InvestRequestSerializer()},
     )
-    def post(self, request, id):
+    def post(self, request, string_id):
         request_data = request.data
         print(f'INVEST REQUEST data: {request_data}', flush=True)
         email = request_data['email']
-        project = CenturionProject.objects.get(string_id=id)
+        project = CenturionProject.objects.get(string_id=string_id)
 
         invest_request = InvestRequest(email=email, project=project)
         invest_request.save()
@@ -56,7 +56,7 @@ class ValidateUsdAmountView(APIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             manual_parameters=[
-                openapi.Parameter('id', openapi.IN_PATH, type=openapi.TYPE_STRING),
+                openapi.Parameter('string_id', openapi.IN_PATH, type=openapi.TYPE_STRING),
             ],
             required=['usd_amount', 'currency'],
             properties={
@@ -66,11 +66,11 @@ class ValidateUsdAmountView(APIView):
         ),
         responses={200: validate_usd_amount_result},
     )
-    def post(self, request, id):
+    def post(self, request, string_id):
         data = request.data
         usd_amount = decimal.Decimal(data['usd_amount'])
         currency = data['currency']
-        project = CenturionProject.objects.get(string_id=id)
+        project = CenturionProject.objects.get(string_id=string_id)
 
         if currency == 'DUC':
             if usd_amount < project.usd_minimal_purchase:

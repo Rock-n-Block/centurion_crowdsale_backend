@@ -14,7 +14,7 @@ from django.core.exceptions import ObjectDoesNotExist
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         manual_parameters=[
-            openapi.Parameter('id', openapi.IN_PATH, type=openapi.TYPE_STRING),
+            openapi.Parameter('string_id', openapi.IN_PATH, type=openapi.TYPE_STRING),
         ],
         properties={
             'usd_amount': openapi.Schema(type=openapi.TYPE_NUMBER),
@@ -30,13 +30,13 @@ from django.core.exceptions import ObjectDoesNotExist
     )},
 )
 @api_view(http_method_names=['POST'])
-def create_charge(request, id):
+def create_charge(request, string_id):
     request_data = request.data
     usd_amount = request_data['usd_amount']
     email = request_data['email']
 
     charge_info = initiate_charge(usd_amount, email)
-    project = CenturionProject.objects.get(string_id=id)
+    project = CenturionProject.objects.get(string_id=string_id)
 
     charge = QuantumCharge(
         project=project,

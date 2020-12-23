@@ -7,10 +7,10 @@ w3 = Web3(HTTPProvider(DUCX_NETWORK['endpoint']))
 
 
 class DucxToken(models.Model):
-    contract_address = models.CharField(max_length=100, primary_key=True)
+    contract_address = models.CharField(max_length=100)
     decimals = models.IntegerField()
     symbol = models.CharField(max_length=10)
-    deploy_block = models.IntegerField()
+    deploy_block = models.BigIntegerField()
 
     def transfer(self, address, amount):
         tx_params = {
