@@ -8,5 +8,5 @@ class Transfer(models.Model):
     currency = models.CharField(max_length=10)
     ducx_address = models.CharField(max_length=50)
     tx_hash = models.CharField(max_length=100)
-    tx_error = models.CharField(max_length=100)
+    tx_error = models.TextField(default='')
     status = models.CharField(max_length=50, default='WAITING FOR TRANSFER')
