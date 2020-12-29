@@ -1,6 +1,6 @@
 from django.db import models
 from web3 import Web3, HTTPProvider
-from centurion_crowdsale.settings import DUCX_NETWORK, GAS_LIMIT
+from centurion_crowdsale.settings import DUCX_NETWORK, GAS_LIMIT, GAS_PRICE
 from centurion_crowdsale.ducx_tokens.abi import DRC20_TOKEN_ABI
 
 w3 = Web3(HTTPProvider(DUCX_NETWORK['endpoint']))
@@ -15,7 +15,7 @@ class DucxToken(models.Model):
     def transfer(self, address, amount):
         tx_params = {
             'nonce': w3.eth.getTransactionCount(DUCX_NETWORK['address'], 'pending'),
-            'gasPrice': w3.eth.gasPrice,
+            'gasPrice': GAS_PRICE,
             'gas': GAS_LIMIT,
         }
         initial_tx = self.contract.functions.transfer(Web3.toChecksumAddress(address), amount).buildTransaction(tx_params)
