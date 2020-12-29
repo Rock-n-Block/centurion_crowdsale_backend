@@ -1,5 +1,5 @@
 from web3 import HTTPProvider, Web3
-from centurion_crowdsale.settings import DUCX_NETWORK, GAS_LIMIT
+from centurion_crowdsale.settings import DUCX_NETWORK, GAS_LIMIT, GAS_PRICE
 
 w3 = Web3(HTTPProvider(DUCX_NETWORK['endpoint']))
 
@@ -8,7 +8,7 @@ def transfer_ducx(address, amount):
     tx_params = {
         'gas': GAS_LIMIT,
         'nonce': w3.eth.getTransactionCount(DUCX_NETWORK['address'], 'pending'),
-        'gasPrice': w3.eth.gasPrice,
+        'gasPrice': GAS_PRICE,
         'to': w3.toChecksumAddress(address),
         'value': amount
     }
