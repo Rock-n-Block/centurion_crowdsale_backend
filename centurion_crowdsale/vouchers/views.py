@@ -67,10 +67,10 @@ class VoucherActivationView(APIView):
         voucher.save()
         token_amount = transfer.amount / (10 ** voucher.project.token.decimals)
         if transfer.tx_hash:
-            print(f'VOUCHER ACTIVATION: Successful transfer {transfer.tx_hash} to {transfer.address} '
+            print(f'VOUCHER ACTIVATION: Successful transfer {transfer.tx_hash} to {transfer.ducx_address} '
                   f'for {token_amount} {transfer.currency}', flush=True)
             return Response({'tx_hash': transfer.tx_hash}, status=200)
         else:
-            print(f'VOUCHER ACTIVATION: Failed transfer {token_amount} {transfer.currency} to {transfer.address} '
+            print(f'VOUCHER ACTIVATION: Failed transfer {token_amount} {transfer.currency} to {transfer.ducx_address} '
                   f'with exception {transfer.tx_error}', flush=True)
             return Response({'detail': 'TRANSFER FAIL'}, status=403)
