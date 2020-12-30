@@ -55,9 +55,8 @@ class Voucher(models.Model):
         except Exception as e:
             transfer.tx_error = repr(e)
             transfer.status = 'FAIL'
-            print(f'Token transfer fail: {transfer.tx_error}', flush=True)
         transfer.save()
-        return transfer.tx_hash
+        return transfer
 
 
 def get_mail_connection():

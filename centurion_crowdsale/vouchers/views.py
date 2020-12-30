@@ -47,21 +47,30 @@ class VoucherActivationView(APIView):
         request_data = request.data
         activation_code = request_data['activation_code']
         ducx_address = request_data['ducx_address']
+        print(f'VOUCHER ACTIVATION: received activation code {activation_code} from {ducx_address}', flush=True)
 
         try:
             voucher = Voucher.objects.get(activation_code=activation_code)
         except ObjectDoesNotExist:
+            print(f'VOUCHER ACTIVATION: voucher {activation_code} doesn`t exist', flush=True)
             return Response(status=404)
 
         if voucher.is_used:
+            print(f'VOUCHER ACTIVATION: voucher {activation_code} has already been used', flush=True)
             return Response({'detail': 'USED'}, status=403)
 
         if voucher.project.is_staking_finished:
+            print(f'VOUCHER ACTIVATION: voucher {activation_code} expired', flush=True)
             return Response({'detail': 'EXPIRED'}, status=403)
 
-        tx_hash = voucher.activate(ducx_address)
+        transfer = voucher.activate(ducx_address)
         voucher.save()
-        if tx_hash:
-            return Response({'tx_hash': tx_hash}, status=200)
+        token_amount = transfer.amount / (10 ** voucher.project.token.decimals)
+        if transfer.tx_hash:
+            print(f'VOUCHER ACTIVATION: Successful transfer {transfer.tx_hash} to {transfer.address} '
+                  f'for {token_amount} {transfer.currency}', flush=True)
+            return Response({'tx_hash': transfer.tx_hash}, status=200)
         else:
+            print(f'VOUCHER ACTIVATION: Failed transfer {token_amount} {transfer.currency} to {transfer.address} '
+                  f'with exception {transfer.tx_error}', flush=True)
             return Response({'detail': 'TRANSFER FAIL'}, status=403)
