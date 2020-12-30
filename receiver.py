@@ -53,7 +53,7 @@ class Receiver(threading.Thread):
         channel.start_consuming()
 
     def payment(self, message):
-        print('RECEIVER: payment message receiverd', flush=True)
+        print('RECEIVER: payment message received', flush=True)
         parse_payment_message(message)
 
     def transferred(self, message):
@@ -61,7 +61,7 @@ class Receiver(threading.Thread):
         #confirm_transfer(message)
 
     def callback(self, ch, method, properties, body):
-        print('received', body, properties, method, flush=True)
+        print('RECEIVER: received', body, properties, method, flush=True)
         try:
             message = json.loads(body.decode())
             if message.get('status', '') == 'COMMITTED':
@@ -73,7 +73,7 @@ class Receiver(threading.Thread):
             ch.basic_ack(delivery_tag=method.delivery_tag)
 
     def unknown_handler(self, message):
-        print('unknown message', message, flush=True)
+        print('RECEIVER: unknown message', message, flush=True)
 
 
 networks = QUEUES.keys()

@@ -13,7 +13,7 @@ def create_voucher(payment):
     try:
         rate_obj = UsdRate.objects.first()
     except UsdRate.DoesNotExist:
-        raise Exception('creating voucher error: You should run rates_checker.py at least once')
+        raise Exception('CREATING VOUCHER ERROR: you should run rates_checker.py at least once')
 
     usd_rate = getattr(rate_obj, payment.currency)
     usd_amount = payment.amount / DECIMALS[payment.currency] / usd_rate
@@ -21,7 +21,7 @@ def create_voucher(payment):
     project = payment.invest_request.project
     if usd_amount < project.usd_minimal_purchase:
         if usd_amount + USD_MINIMAL_PURCHASE_BIAS < project.usd_minimal_purchase:
-            print(f'creating voucher: Minimal purchase is {project.usd_minimal_purchase}$ '
+            print(f'CREATING VOUCHER: minimal purchase is {project.usd_minimal_purchase}$ '
                   f'but {usd_amount}$ was received, voucher not created', flush=True)
             return None
         else:
@@ -34,7 +34,7 @@ def create_voucher(payment):
         email=payment.invest_request.email,
     )
     voucher.save()
-    print(f'saving voucher: {voucher.email}`s {voucher.project.project_name} voucher '
+    print(f'SAVING VOUCHER: {voucher.email}`s {voucher.project.project_name} voucher '
           f'for {voucher.usd_amount}$ successfully saved', flush=True)
     return voucher
 
@@ -56,7 +56,7 @@ def parse_payment_message(message):
         invest_request = InvestRequest.objects.get(id=message['exchangeId'])
         project = invest_request.project
         payment = save_payment(invest_request, message)
-        print(f'parsing payment: {project.project_name} payment {payment.tx_hash} '
+        print(f'PARSING PAYMENT: {project.project_name} payment {payment.tx_hash} '
               f'for {payment.amount / DECIMALS[payment.currency]} {payment.currency} successfully saved', flush=True)
 
         voucher = create_voucher(payment)
@@ -70,12 +70,12 @@ def parse_payment_message(message):
 
             try:
                 voucher.send_mail()
-                print(f'sending voucher: {voucher.project.project_name} voucher '
+                print(f'SENDING VOUCHER: {voucher.project.project_name} voucher '
                       f'for {voucher.usd_amount}$ was successfully sent to {voucher.email}', flush=True)
                 voucher.save()
             except Exception:
-                print(f'sending voucher error: Sending {voucher.project.project_name} voucher '
+                print(f'SENDING VOUCHER ERROR: sending {voucher.project.project_name} voucher '
                       f'for {voucher.usd_amount}$ to {voucher.email} failed, error log: ', flush=True)
                 print('\n'.join(traceback.format_exception(*sys.exc_info())), flush=True)
     else:
-        print('parsing payment: Payment {tx_hash} already registered', flush=True)
+        print('PARSING PAYMENT: payment {tx_hash} already registered', flush=True)
