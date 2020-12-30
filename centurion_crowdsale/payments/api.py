@@ -34,8 +34,8 @@ def create_voucher(payment):
         email=payment.invest_request.email,
     )
     voucher.save()
-    print(f'SAVING VOUCHER: {voucher.email}`s {voucher.project.project_name} voucher '
-          f'for {voucher.usd_amount}$ successfully saved', flush=True)
+    print(f'CREATING VOUCHER: {voucher.email}`s {voucher.project.project_name} voucher '
+          f'for {voucher.usd_amount}$ successfully created', flush=True)
     return voucher
 
 
