@@ -33,8 +33,7 @@ class DucxToken(models.Model):
         for event in events:
             addresses.add(event['args']['from'])
             addresses.add(event['args']['to'])
-        addresses.remove('0x0000000000000000000000000000000000000000')
-        addresses.remove(DUCX_NETWORK['address'])
+        addresses.difference_update({'0x' + '0' * 40, DUCX_NETWORK['address']})
         return addresses
 
     def balances(self):
