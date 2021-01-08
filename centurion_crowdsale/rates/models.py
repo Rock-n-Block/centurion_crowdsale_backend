@@ -10,7 +10,7 @@ class UsdRate(models.Model):
     USDC = models.FloatField()
     USDT = models.FloatField()
     DUC = models.FloatField()
-    datetime = models.DateTimeField(auto_now=True)
+    last_update_datetime = models.DateTimeField(auto_now=True)
 
     def update_rates(self):
         payload = {

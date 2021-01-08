@@ -11,6 +11,7 @@ class InvestRequest(models.Model):
     duc_address = models.CharField(max_length=50)
     btc_address = models.CharField(max_length=50)
     eth_address = models.CharField(max_length=50)
+    creation_datetime = models.DateTimeField(auto_now_add=True)
 
     def generate_keys(self):
         eth_btc_root_public_key = HD_ROOT_KEYS['ETH-BTC']['public']

@@ -16,7 +16,7 @@ class Voucher(models.Model):
     usd_amount = models.DecimalField(max_digits=100, decimal_places=2)
     is_used = models.BooleanField(default=False)
     is_email_sent = models.BooleanField(default=False)
-    publish_datetime = models.DateTimeField(auto_now_add=True)
+    creation_datetime = models.DateTimeField(auto_now_add=True)
     activation_datetime = models.DateTimeField(null=True, default=None)
     email = models.CharField(max_length=50, default='')
 

@@ -10,3 +10,4 @@ class Transfer(models.Model):
     tx_hash = models.CharField(max_length=100)
     tx_error = models.TextField(default='')
     status = models.CharField(max_length=50, default='WAITING FOR TRANSFER')
+    creation_datetime = models.DateTimeField(auto_now_add=True)
