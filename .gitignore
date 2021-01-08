@@ -1,13 +1,8 @@
 .idea/
 .env
 .docker/
-/venv/
-/__pycache__/
-/*/__pycache__/
-/*/*/__pycache__/
-/*/*/*/__pycache__/
-/centurion_crowdsale/settings_email.py
-/centurion_crowdsale/settings_local.py
-mywill_scanner/db.sqlite3
+venv/
+**/__pycache__
+centurion_crowdsale/settings_local.py
 mywill_scanner/settings/
-add_project.py
+static/
