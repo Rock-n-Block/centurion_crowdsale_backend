@@ -6,7 +6,7 @@ from centurion_crowdsale.ducx_tokens.serializers import DucxTokenSerializer
 
 class CenturionProjectSerializer(serializers.ModelSerializer):
     token = DucxTokenSerializer()
-    raise_start_datetime = serializers.DateTimeField(format="%s")
+    raise_start_datetime = serializers.DateTimeField(format="%s", allow_null=True, required=False)
     raise_finish_datetime = serializers.DateTimeField(format="%s", read_only=True)
 
     class Meta:
