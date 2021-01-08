@@ -4,6 +4,7 @@ from centurion_crowdsale.transfers.models import Transfer
 from centurion_crowdsale.vouchers.voucher_email import html_style, voucher_html_body
 from django.core.mail import send_mail
 from django.core.mail import get_connection
+from django.utils import timezone
 from centurion_crowdsale.settings import EMAIL_HOST_USER, EMAIL_HOST, EMAIL_PORT, EMAIL_USE_TLS, EMAIL_HOST_PASSWORD
 
 
@@ -15,8 +16,8 @@ class Voucher(models.Model):
     usd_amount = models.DecimalField(max_digits=100, decimal_places=2)
     is_used = models.BooleanField(default=False)
     is_email_sent = models.BooleanField(default=False)
-    publish_date = models.DateTimeField(auto_now_add=True)
-    activation_date = models.DateTimeField(null=True, default=None)
+    publish_datetime = models.DateTimeField(auto_now_add=True)
+    activation_datetime = models.DateTimeField(null=True, default=None)
     email = models.CharField(max_length=50, default='')
 
     def send_mail(self):
@@ -51,6 +52,7 @@ class Voucher(models.Model):
             transfer.tx_hash = token.transfer(address, token_amount)
             transfer.status = 'WAITING FOR CONFIRM'
             self.is_used = True
+            self.activation_datetime = timezone.now()
             self.save()
         except Exception as e:
             transfer.tx_error = repr(e)
