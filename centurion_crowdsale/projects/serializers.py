@@ -6,6 +6,8 @@ from centurion_crowdsale.ducx_tokens.serializers import DucxTokenSerializer
 
 class CenturionProjectSerializer(serializers.ModelSerializer):
     token = DucxTokenSerializer()
+    raise_start_datetime = serializers.DateTimeField(format="%s")
+    raise_finish_datetime = serializers.DateTimeField(format="%s", read_only=True)
 
     class Meta:
         model = CenturionProject
@@ -25,9 +27,9 @@ class CenturionProjectSerializer(serializers.ModelSerializer):
             'default_image',
             'images',
             'investors',
-            'raise_start_timestamp',
+            'raise_start_datetime',
             'raise_months',
-            'raise_finish_timestamp',
+            'raise_finish_datetime',
             'months_between_raise_and_staking',
             'staking_months',
             'ducx_staking_monthly_percent',
