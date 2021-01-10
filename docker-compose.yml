@@ -65,6 +65,7 @@ services:
     networks:
       centurion-net:
   celery:
+    env_file: .env
     build:
       context: .
       dockerfile: dockerfiles/celery.Dockerfile
