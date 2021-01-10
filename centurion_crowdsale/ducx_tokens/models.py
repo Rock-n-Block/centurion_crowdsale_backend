@@ -36,7 +36,7 @@ class DucxToken(models.Model):
         addresses.difference_update({'0x' + '0' * 40, DUCX_NETWORK['address']})
         return addresses
 
-    def balances(self):
+    def holders_balances(self):
         balances = {}
         for address in self.holders():
             balance = self.contract.functions.balanceOf(address).call()

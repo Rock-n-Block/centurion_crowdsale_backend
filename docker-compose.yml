@@ -64,6 +64,16 @@ services:
     restart: unless-stopped
     networks:
       centurion-net:
+  celery:
+    build:
+      context: .
+      dockerfile: dockerfiles/celery.Dockerfile
+    depends_on:
+      - db
+      - rabbitmq
+    restart: unless-stopped
+    networks:
+      centurion-net:
 
 networks:
   centurion-net:

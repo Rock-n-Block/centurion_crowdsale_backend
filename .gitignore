@@ -6,3 +6,4 @@ venv/
 centurion_crowdsale/settings_local.py
 mywill_scanner/settings/
 static/
+celerybeat-schedule

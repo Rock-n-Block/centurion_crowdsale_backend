@@ -4,6 +4,7 @@ from drf_yasg import openapi
 from centurion_crowdsale.vouchers.models import Voucher
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
+from django.utils import timezone
 
 
 activation_success_response = openapi.Response(
@@ -59,7 +60,7 @@ class VoucherActivationView(APIView):
             print(f'VOUCHER ACTIVATION: voucher {activation_code} has already been used', flush=True)
             return Response({'detail': 'USED'}, status=403)
 
-        if voucher.project.is_staking_finished:
+        if timezone.now() > voucher.project.staking_finish_datetime:
             print(f'VOUCHER ACTIVATION: voucher {activation_code} expired', flush=True)
             return Response({'detail': 'EXPIRED'}, status=403)
 

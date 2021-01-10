@@ -42,16 +42,19 @@ class CenturionProject(models.Model):
             return 'EXPIRED'
 
     @property
-    def is_staking_finished(self):
-        staking_finish_datetime = self.raise_finish_datetime \
-                              + relativedelta(months=self.months_between_raise_and_staking + self.staking_months - 1)
-        return timezone.now() > staking_finish_datetime
-
-    @property
     def raise_finish_datetime(self):
         if self.raise_start_datetime is None:
             return None
         return self.raise_start_datetime + relativedelta(months=self.raise_months)
+
+    @property
+    def staking_start_datetime(self):
+        return self.raise_finish_datetime + relativedelta(months=self.months_between_raise_and_staking)
+
+    @property
+    def staking_finish_datetime(self):
+        return self.raise_finish_datetime + \
+               relativedelta(months=self.months_between_raise_and_staking + self.staking_months - 1)
 
     @property
     def usd_collected(self):
