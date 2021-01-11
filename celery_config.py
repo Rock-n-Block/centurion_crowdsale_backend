@@ -24,8 +24,10 @@ for project in projects:
         'args': (project.string_id,),  # celery doesn't support models as arguments
         'schedule':
             crontab(hour=DUCX_STAKING_HOUR, minute=DUCX_STAKING_MINUTE, day_of_month=project.raise_start_datetime.day,),
-        'eta': project.staking_start_datetime,
-        'expires': project.staking_finish_datetime,
+        'options': {
+             'eta': project.staking_start_datetime,
+             'expires': project.staking_finish_datetime,
+        },
     }
 
 app.conf.beat_schedule = schedule
