@@ -21,7 +21,7 @@ for project in projects:
 
     schedule[f'{project.string_id}_ducx_staking'] = {
         'task': 'celery_tasks.ducx_staking',
-        'args': (project,),
+        'args': (project.string_id,),  # celery doesn't support models as arguments
         'schedule':
             crontab(hour=DUCX_STAKING_HOUR, minute=DUCX_STAKING_MINUTE, day_of_month=project.raise_start_datetime.day,),
         'eta': project.staking_start_datetime,

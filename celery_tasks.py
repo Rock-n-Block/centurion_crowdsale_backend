@@ -2,11 +2,13 @@ import time
 from centurion_crowdsale.transfers.api import transfer_ducx
 from centurion_crowdsale.settings import DUCX_STAKING_TIMEOUT, DUCX_DECIMALS
 from centurion_crowdsale.transfers.models import Transfer
+from centurion_crowdsale.projects.models import CenturionProject
 from celery import shared_task
 
 
 @shared_task
-def ducx_staking(project):
+def ducx_staking(project_id):
+    project = CenturionProject.objects.get(string_id=project_id)
     token = project.token
     balances = token.holders_balances()
     token_decimals = 10 ** token.decimals
