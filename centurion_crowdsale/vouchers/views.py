@@ -5,6 +5,8 @@ from centurion_crowdsale.vouchers.models import Voucher
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from django.utils import timezone
+import requests
+import json
 
 
 activation_success_response = openapi.Response(
@@ -48,7 +50,12 @@ class VoucherActivationView(APIView):
         request_data = request.data
         activation_code = request_data['activation_code']
         ducx_address = request_data['ducx_address']
+
         print(f'VOUCHER ACTIVATION: received activation code {activation_code} from {ducx_address}', flush=True)
+
+        duc_back_response = requests.post('http://www.ducatuscoins.com/api/v3/transfer', data=request_data)
+        if duc_back_response.status_code != 404:
+            return Response(json.loads(duc_back_response.content))
 
         try:
             voucher = Voucher.objects.get(activation_code=activation_code)
