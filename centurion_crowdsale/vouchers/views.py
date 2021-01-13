@@ -53,9 +53,15 @@ class VoucherActivationView(APIView):
 
         print(f'VOUCHER ACTIVATION: received activation code {activation_code} from {ducx_address}', flush=True)
 
-        duc_back_response = requests.post('http://www.ducatuscoins.com/api/v3/transfer', data=request_data)
-        if duc_back_response.status_code != 404:
-            return Response(json.loads(duc_back_response.content))
+        duc_back_response = requests.post('https://www.ducatuscoins.com/api/v3/transfer/', data=request_data)
+        status = duc_back_response.status_code
+
+        if status != 500:
+            data = json.loads(duc_back_response.content)
+            if status == 403 and data['detail'] == "Invalid activation code":
+                pass
+            else:
+                return Response(data, status=status)
 
         try:
             voucher = Voucher.objects.get(activation_code=activation_code)
