@@ -49,10 +49,14 @@ class CenturionProject(models.Model):
 
     @property
     def staking_start_datetime(self):
+        if self.raise_start_datetime is None:
+            return None
         return self.raise_finish_datetime + relativedelta(months=self.months_between_raise_and_staking)
 
     @property
     def staking_finish_datetime(self):
+        if self.raise_start_datetime is None:
+            return None
         return self.raise_finish_datetime + \
                relativedelta(months=self.months_between_raise_and_staking + self.staking_months - 1)
 
