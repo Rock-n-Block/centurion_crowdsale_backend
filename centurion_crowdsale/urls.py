@@ -33,5 +33,5 @@ urlpatterns = [
     path('api/v1/projects/<str:string_id>/invest', InvestRequestView.as_view()),
     path('api/v1/projects/<str:string_id>/validate_usd_amount', ValidateUsdAmountView.as_view()),
     path('api/v1/projects/<str:string_id>/create_charge', create_charge),
-    path('api/v1/change_charge_status/', change_charge_status),
+    path('api/v1/change_charge_status', change_charge_status),
 ]
