@@ -20,7 +20,7 @@ class CenturionProject(models.Model):
     usd_collected_from_duc = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     duc_collected = models.DecimalField(max_digits=100, decimal_places=0, default=0)
     usd_minimal_purchase = models.IntegerField()
-    raise_start_datetime = models.DateTimeField(null=True, default=None)
+    raise_start_date = models.DateTimeField(null=True, default=None)
     raise_months = models.IntegerField()
     months_between_raise_and_staking = models.IntegerField()
     duc_percent_in_target_raise = models.IntegerField()
@@ -30,9 +30,9 @@ class CenturionProject(models.Model):
     @property
     def status(self):
         now = timezone.now()
-        if self.raise_start_datetime is None or now < self.raise_start_datetime:
+        if self.raise_start_date is None or now < self.raise_start_date:
             return 'COMING SOON'
-        elif now <= self.raise_finish_datetime:
+        elif now <= self.raise_finish_date:
             if self.usd_collected >= self.usd_target_raise:
                 return 'COMPLETED'
             return 'ACTIVE'
@@ -42,22 +42,22 @@ class CenturionProject(models.Model):
             return 'EXPIRED'
 
     @property
-    def raise_finish_datetime(self):
-        if self.raise_start_datetime is None:
+    def raise_finish_date(self):
+        if self.raise_start_date is None:
             return None
-        return self.raise_start_datetime + relativedelta(months=self.raise_months)
+        return self.raise_start_date + relativedelta(months=self.raise_months)
 
     @property
-    def staking_start_datetime(self):
-        if self.raise_start_datetime is None:
+    def staking_start_date(self):
+        if self.raise_start_date is None:
             return None
-        return self.raise_finish_datetime + relativedelta(months=self.months_between_raise_and_staking)
+        return self.raise_finish_date + relativedelta(months=self.months_between_raise_and_staking)
 
     @property
-    def staking_finish_datetime(self):
-        if self.raise_start_datetime is None:
+    def staking_finish_date(self):
+        if self.raise_start_date is None:
             return None
-        return self.raise_finish_datetime + \
+        return self.raise_finish_date + \
                relativedelta(months=self.months_between_raise_and_staking + self.staking_months - 1)
 
     @property

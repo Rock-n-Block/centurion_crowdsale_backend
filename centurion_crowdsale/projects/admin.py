@@ -6,9 +6,9 @@ class CenturionProjectAdmin(admin.ModelAdmin):
     readonly_fields = (
         'status',
         'investors',
-        'raise_finish_datetime',
-        'staking_start_datetime',
-        'staking_finish_datetime',
+        'raise_finish_date',
+        'staking_start_date',
+        'staking_finish_date',
         'duc_target_raise',
         'usd_from_fiat_target_raise',
         'usd_from_duc_target_raise',
