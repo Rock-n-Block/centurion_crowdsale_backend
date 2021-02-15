@@ -3,7 +3,7 @@ from centurion_crowdsale.projects.models import CenturionProject
 
 
 class CenturionProjectAdmin(admin.ModelAdmin):
-    readonly_fields = (
+    list_display = (
         'status',
         'investors',
         'raise_finish_datetime',
