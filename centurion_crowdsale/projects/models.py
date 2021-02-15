@@ -20,7 +20,7 @@ class CenturionProject(models.Model):
     usd_collected_from_duc = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     duc_collected = models.DecimalField(max_digits=100, decimal_places=0, default=0)
     usd_minimal_purchase = models.IntegerField()
-    raise_start_date = models.DateTimeField(null=True, default=None)
+    raise_start_date = models.DateTimeField(null=True, default=None, blank=True)
     raise_months = models.IntegerField()
     months_between_raise_and_staking = models.IntegerField()
     duc_percent_in_target_raise = models.IntegerField()
