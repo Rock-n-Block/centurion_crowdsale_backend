@@ -22,6 +22,14 @@ services:
     restart: unless-stopped
     volumes:
       - ./static:/app/static
+      - ./centurion_crowdsale/ducx_tokens:/app/centurion_crowdsale/ducx_tokens
+      - ./centurion_crowdsale/invest_requests:/app/centurion_crowdsale/invest_requests
+      - ./centurion_crowdsale/payments:/app/centurion_crowdsale/payments
+      - ./centurion_crowdsale/projects:/app/centurion_crowdsale/projects
+      - ./centurion_crowdsale/quantum:/app/centurion_crowdsale/quantum
+      - ./centurion_crowdsale/rates:/app/centurion_crowdsale/rates
+      - ./centurion_crowdsale/transfers:/app/centurion_crowdsale/transfers
+      - ./centurion_crowdsale/vouchers:/app/centurion_crowdsale/vouchers
     networks:
       centurion-net:
   receiver:
