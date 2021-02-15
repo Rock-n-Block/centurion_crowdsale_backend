@@ -16,17 +16,17 @@ schedule = {}
 projects = CenturionProject.objects.all()
 
 for project in projects:
-    if project.raise_start_date is None:
+    if project.raise_start_datetime is None:
         continue
 
     schedule[f'{project.string_id}_ducx_staking'] = {
         'task': 'celery_tasks.ducx_staking',
         'args': (project.string_id,),  # celery doesn't support models as arguments
         'schedule':
-            crontab(hour=DUCX_STAKING_HOUR, minute=DUCX_STAKING_MINUTE, day_of_month=project.raise_start_date.day, ),
+            crontab(hour=DUCX_STAKING_HOUR, minute=DUCX_STAKING_MINUTE, day_of_month=project.raise_start_datetime.day, ),
         'options': {
-             'eta': project.staking_start_date,
-             'expires': project.staking_finish_date,
+             'eta': project.staking_start_datetime,
+             'expires': project.staking_finish_datetime,
         },
     }
 

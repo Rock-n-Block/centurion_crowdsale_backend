@@ -73,7 +73,7 @@ class VoucherActivationView(APIView):
             print(f'VOUCHER ACTIVATION: voucher {activation_code} has already been used', flush=True)
             return Response({'detail': 'USED'}, status=403)
 
-        if timezone.now() > voucher.project.staking_finish_date:
+        if timezone.now() > voucher.project.staking_finish_datetime:
             print(f'VOUCHER ACTIVATION: voucher {activation_code} expired', flush=True)
             return Response({'detail': 'EXPIRED'}, status=403)
 
