@@ -62,7 +62,7 @@ def parse_payment_message(message):
         voucher = create_voucher(payment)
         if voucher:
             if payment.currency == 'DUC':
-                project.duc_collected += payment.amount / DECIMALS['DUC']
+                project.duc_collected += decimal.Decimal(payment.amount / DECIMALS['DUC'])
                 project.usd_collected_from_duc += voucher.usd_amount
             else:
                 project.usd_collected_from_fiat += voucher.usd_amount
