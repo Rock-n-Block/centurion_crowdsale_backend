@@ -19,7 +19,7 @@ class BTCScanner(ScannerPolling):
                 for a in output.address:
                     address_transactions[a].append(transaction)
 
-        print('{}: transactions'.format(self.network.type), address_transactions, flush=True)
+        # print('{}: transactions'.format(self.network.type), address_transactions, flush=True)
         block_event = BlockEvent(self.network, block, address_transactions)
 
         pub.sendMessage(self.network.type, block_event=block_event)
