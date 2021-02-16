@@ -36,8 +36,8 @@ class EthScanner(ScannerPolling):
 
         if to_address and to_address.address:
             address[to_address.address.lower()].append(tx)
-        else:
-            self._check_tx_creates(tx, address)
+        #else:
+            #self._check_tx_creates(tx, address)
 
     def _check_tx_creates(self, tx, address):
         if tx.creates:
