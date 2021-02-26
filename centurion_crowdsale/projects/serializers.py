@@ -5,9 +5,8 @@ from centurion_crowdsale.ducx_tokens.serializers import DucxTokenSerializer
 
 class CenturionProjectSerializer(serializers.ModelSerializer):
     token = DucxTokenSerializer()
-    raise_start_date = serializers.DateTimeField(source='raise_start_datetime',
-                                                 format="%s", allow_null=True, required=False)
-    raise_finish_date = serializers.DateTimeField(source='raise_finish_datetime', format="%s", read_only=True)
+    raise_start_datetime = serializers.DateTimeField(format="%s", allow_null=True, required=False)
+    raise_finish_datetime = serializers.DateTimeField(format="%s", read_only=True)
 
     class Meta:
         model = CenturionProject
@@ -27,9 +26,9 @@ class CenturionProjectSerializer(serializers.ModelSerializer):
             'default_image',
             'images',
             'investors',
-            'raise_start_date',
+            'raise_start_datetime',
             'raise_months',
-            'raise_finish_date',
+            'raise_finish_datetime',
             'months_between_raise_and_staking',
             'staking_months',
             'ducx_staking_monthly_percent',
@@ -69,7 +68,7 @@ class CenturionProjectSerializer(serializers.ModelSerializer):
 
 
 class CenturionProjectListSerializer(serializers.ModelSerializer):
-    raise_finish_date = serializers.DateTimeField(source='raise_finish_datetime', format="%s", read_only=True)
+    raise_finish_datetime = serializers.DateTimeField(format="%s", read_only=True)
 
     class Meta:
         model = CenturionProject
@@ -79,7 +78,7 @@ class CenturionProjectListSerializer(serializers.ModelSerializer):
             'default_image',
             'project_name',
             'description',
-            'raise_finish_date',
+            'raise_finish_datetime',
             'usd_collected',
             'usd_target_raise'
         )
