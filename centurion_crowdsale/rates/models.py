@@ -1,7 +1,7 @@
 from django.db import models
 import json
 import requests
-from centurion_crowdsale.settings import CRYPTOCOMPARE_API_KEY, CRYPTOCOMPARE_API_URL, DUC_RATE
+from centurion_crowdsale.settings import CRYPTOCOMPARE_API_KEY, CRYPTOCOMPARE_API_URL, DUCATUS_RATES_API_URL
 
 
 class UsdRate(models.Model):
@@ -20,12 +20,16 @@ class UsdRate(models.Model):
         }
         response = requests.get(CRYPTOCOMPARE_API_URL, params=payload)
         if response.status_code != 200:
-            raise Exception(f'Cannot get exchange rate')
+            raise Exception(f'Cannot get exchange rates')
         response_data = json.loads(response.text)
 
         self.BTC = response_data['BTC']
         self.ETH = response_data['ETH']
         self.USDC = response_data['USDC']
         self.USDT = response_data['USDT']
-        self.DUC = 1 / DUC_RATE
-        # self.duc_rate = json.loads(requests.get(DUC_USD_RATE_API_URL).content)['USD']
+
+        response = requests.get(DUCATUS_RATES_API_URL.format(fsym='USD', tsyms='DUC'))
+        if response.status_code != 200:
+            raise Exception(f'Cannot get DUC exchange rate')
+
+        self.DUC = json.loads(response.content)['DUC']
