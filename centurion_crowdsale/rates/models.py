@@ -10,6 +10,7 @@ class UsdRate(models.Model):
     USDC = models.FloatField()
     USDT = models.FloatField()
     DUC = models.FloatField()
+    DUCX = models.FloatField()
     last_update_datetime = models.DateTimeField(auto_now=True)
 
     def update_rates(self):
@@ -28,8 +29,10 @@ class UsdRate(models.Model):
         self.USDC = response_data['USDC']
         self.USDT = response_data['USDT']
 
-        response = requests.get(DUCATUS_RATES_API_URL.format(fsym='USD', tsyms='DUC'))
+        response = requests.get(DUCATUS_RATES_API_URL.format(fsym='USD', tsyms='DUC,DUCX'))
         if response.status_code != 200:
             raise Exception(f'Cannot get DUC exchange rate')
+        rates = json.loads(response.content)
 
-        self.DUC = json.loads(response.content)['DUC']
+        self.DUC = rates['DUC']
+        self.DUCX = rates['DUCX']
