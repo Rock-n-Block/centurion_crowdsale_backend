@@ -29,12 +29,12 @@ def ducx_staking(project_id):
             transfer.tx_hash = transfer_ducx(address, amount)
             transfer.status = 'WAITING FOR CONFIRM'
             print(f'DUCX STAKING: successful transfer {transfer.tx_hash} to {transfer.ducx_address} '
-                  f'for {amount} DUCX', flush=True)
+                  f'for {amount / DUCX_DECIMALS} DUCX', flush=True)
         except Exception as e:
             transfer.tx_error = repr(e)
             transfer.status = 'FAIL'
 
-            print(f'DUCX STAKING: failed transfer {amount} DUCX to {transfer.ducx_address} '
+            print(f'DUCX STAKING: failed transfer {amount / DUCX_DECIMALS} DUCX to {transfer.ducx_address} '
                   f'with exception {transfer.tx_error}', flush=True)
             errors += 1
         transfer.save()
