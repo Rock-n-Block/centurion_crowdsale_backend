@@ -3,6 +3,7 @@ from centurion_crowdsale.transfers.api import transfer_ducx
 from centurion_crowdsale.settings import DUCX_STAKING_TIMEOUT, DUCX_DECIMALS
 from centurion_crowdsale.transfers.models import Transfer
 from centurion_crowdsale.projects.models import CenturionProject
+from centurion_crowdsale.rates.models import UsdRate
 from celery import shared_task
 
 
@@ -16,7 +17,8 @@ def ducx_staking(project_id):
     print(f'DUCX STAKING: start {project.project_name} staking...', flush=True)
     errors = 0
     for address, balance in balances.items():
-        amount = int(balance * DUCX_DECIMALS * k / token_decimals)
+        ducx_rate = UsdRate.objects.first().DUCX
+        amount = int(balance * k * ducx_rate * DUCX_DECIMALS / token_decimals)
 
         transfer = Transfer(
             amount=amount,
