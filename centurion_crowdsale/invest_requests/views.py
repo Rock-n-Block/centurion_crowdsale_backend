@@ -88,3 +88,7 @@ class ValidateUsdAmountView(APIView):
                 status = 'OK'
 
         return Response({'status': status}, status=200)
+
+@api_view(http_method_names=['GET'])
+def total_id_count(request):
+    return Response(InvestRequest.objects.all().last().id, status=status.HTTP_200_OK)
