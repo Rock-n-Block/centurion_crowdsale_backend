@@ -92,4 +92,4 @@ class ValidateUsdAmountView(APIView):
 
 @api_view(http_method_names=['GET'])
 def last_hd_wallet_id_view(request):
-    return Response(InvestRequest.objects.all().last().id, status=status.HTTP_200_OK)
+    return Response(InvestRequest.objects.all().last().id, status=200)
