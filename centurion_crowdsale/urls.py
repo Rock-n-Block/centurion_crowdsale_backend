@@ -3,7 +3,7 @@ from django.urls import path, include
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
-from centurion_crowdsale.invest_requests.views import InvestRequestView, ValidateUsdAmountView, total_id_count
+from centurion_crowdsale.invest_requests.views import InvestRequestView, ValidateUsdAmountView, last_hd_wallet_id_view
 from centurion_crowdsale.vouchers.views import VoucherActivationView
 from centurion_crowdsale.projects.views import CenturionProjectView, CenturionProjectsView
 from centurion_crowdsale.rates.views import UsdRateView
@@ -34,5 +34,5 @@ urlpatterns = [
     path('api/v1/projects/<str:string_id>/validate_usd_amount', ValidateUsdAmountView.as_view()),
     path('api/v1/projects/<str:string_id>/create_charge', create_charge),
     path('api/v1/change_charge_status', change_charge_status),
-    path('api/v1/total', total_id_count)
+    path('api/v1/last_hd_wallet_id/', last_hd_wallet_id_view)
 ]
