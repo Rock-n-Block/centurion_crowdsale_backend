@@ -2,6 +2,7 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from centurion_crowdsale.invest_requests.models import InvestRequest
 from centurion_crowdsale.projects.models import CenturionProject
 from centurion_crowdsale.invest_requests.serializers import InvestRequestSerializer
@@ -88,3 +89,7 @@ class ValidateUsdAmountView(APIView):
                 status = 'OK'
 
         return Response({'status': status}, status=200)
+
+@api_view(http_method_names=['GET'])
+def last_hd_wallet_id_view(request):
+    return Response(InvestRequest.objects.all().last().id, status=status.HTTP_200_OK)
