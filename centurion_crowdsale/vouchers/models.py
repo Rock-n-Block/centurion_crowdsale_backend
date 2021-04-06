@@ -30,7 +30,8 @@ class Voucher(models.Model):
             tokens_purchased=self.usd_amount,
             project_leased=self.project.project_name,
             period_of_lease=self.project.staking_months,
-            activate_code=self.activation_code
+            activate_code=self.activation_code,
+            symbol=self.project.token.symbol,
         )
         send_mail(
             f'Your Lease Confirmation for ${self.usd_amount}',
