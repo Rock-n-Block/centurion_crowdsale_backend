@@ -330,7 +330,7 @@ voucher_html_body = """<body
                         </li>
                         <li style="margin-bottom: 10px">
                           Enter your Activation Code, then the address you want
-                          to send (Is it DUC Wallet or DUCX?)
+                          to send (The address should represent the token you want to receive: select {symbol} token from the list.)
                         </li>
                         <li style="margin-bottom: 10px">Click Activate</li>
                       </ul>
